@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Avneet Hundel. Strategy and Chief of Staff for health tech.">
+<meta property="og:image" content="avneet.jpg">
+<meta name="theme-color" content="#0C0C0C">
+<title>Avneet Hundel · Strategy</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0C0C; --ink:#0C0C0C; --pale:#EFE4DA; --dim:#9C9189; --line:rgba(239,228,218,.16);
+  --o:#F2823A; --o2:#FFB27A; --o3:#E2561F; --card:#151312; --white:#FFFFFF;
+  --grad:linear-gradient(180deg,#6E6259 0%,#F3E4D6 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg)}
+body{font-family:'Kanit',system-ui,sans-serif;color:var(--pale);font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:var(--o);color:#0C0C0C}
+.ar{font-family:"Segoe UI Symbol","Apple Symbols",system-ui,sans-serif}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.big{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.9;text-align:center;font-size:clamp(3rem,12vw,160px)}
+.dot{-webkit-text-fill-color:var(--o);color:var(--o)}
+.px{padding-left:clamp(20px,4vw,40px);padding-right:clamp(20px,4vw,40px)}
+
+/* fade in */
+.fi{opacity:0;transform:translate(var(--fx,0),var(--fy,30px));transition:opacity .7s cubic-bezier(.25,.1,.25,1),transform .7s cubic-bezier(.25,.1,.25,1);transition-delay:var(--d,0s)}
+.fi.in{opacity:1;transform:none}
+
+/* buttons */
+.cbtn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;color:#fff;font-weight:500;text-transform:uppercase;letter-spacing:.14em;font-size:clamp(12px,1vw,16px);padding:clamp(12px,1.2vw,16px) clamp(28px,3vw,48px);
+  background:linear-gradient(123deg,#1F0A01 7%,#B8400F 37%,#E2561F 62%,#F2A05B 100%);box-shadow:0 4px 4px rgba(226,86,31,.25),4px 4px 12px #8A2E06 inset;outline:2px solid #fff;outline-offset:-3px;transition:transform .2s,filter .2s;white-space:nowrap}
+.cbtn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.gbtn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;border:2px solid var(--pale);color:var(--pale);font-weight:500;text-transform:uppercase;letter-spacing:.14em;font-size:clamp(12px,1vw,15px);padding:12px 28px;transition:background .2s,border-color .2s,color .2s;white-space:nowrap}
+.gbtn:hover{background:var(--o);border-color:var(--o);color:#0C0C0C}
+
+/* ===== HERO ===== */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;display:flex;flex-direction:column;overflow-x:clip}
+.nav{display:flex;justify-content:space-between;padding-top:clamp(22px,3vw,32px)}
+.nav a{color:var(--pale);font-weight:500;text-transform:uppercase;letter-spacing:.08em;font-size:clamp(13px,1.5vw,22px);transition:opacity .2s,color .2s}
+.nav a:hover{color:var(--o)}
+.hwrap{overflow:hidden;text-align:center;padding-bottom:.12em;margin-top:clamp(18px,2vw,8px)}
+.hero h1{display:inline-block;font-weight:900;text-transform:uppercase;letter-spacing:-.025em;line-height:.88;white-space:nowrap;text-align:center;font-size:13vw}
+.hbot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:clamp(26px,3vw,40px);position:relative;z-index:12}
+.hbot p{max-width:300px;text-transform:uppercase;letter-spacing:.04em;line-height:1.3;font-size:clamp(.78rem,1.25vw,1.2rem)}
+.hbot p b{display:block;color:var(--o);font-weight:500;font-size:.8em;letter-spacing:.12em;margin-bottom:10px}
+.open{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:16px;max-width:340px}
+.open small{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--dim);margin-right:4px}
+.open span{border:1px solid var(--o);color:var(--o);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:500;white-space:nowrap}
+.hr{display:flex;flex-direction:column;align-items:flex-end;gap:18px}
+.hstats{display:flex;gap:clamp(16px,2.4vw,36px);text-align:right}
+.hstats div{display:flex;flex-direction:column;gap:4px;max-width:150px}
+.hstats b{font-weight:700;font-size:clamp(18px,1.9vw,28px);line-height:1;color:var(--pale)}
+.hstats div:nth-child(2) b{color:var(--o)}
+.hstats span{font-size:12px;line-height:1.35;color:var(--dim)}
+
+/* portrait */
+.pwrap{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);z-index:10;width:clamp(200px,min(28vw,40vh),400px)}
+.pstage{position:relative;width:100%;aspect-ratio:640/720;cursor:crosshair;touch-action:pan-y}
+#pdots{position:absolute;left:-30%;top:-30%;width:160%;height:160%;pointer-events:none;transition:opacity .12s}
+.pstage.photo #pdots{opacity:0;transition:opacity .9s ease}
+.pstage .avatar{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transition:opacity .4s;user-select:none;-webkit-user-drag:none}
+.pstage.live .avatar{opacity:0;transition:opacity .12s}
+.pstage.live.photo .avatar{opacity:1;transition:opacity .9s ease}
+#bgdots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.hero>.nav,.hero>.hwrap,.hero>.hbot{position:relative;z-index:1}
+@keyframes spin{to{transform:rotate(1turn)}}
+.ptilt{position:absolute;inset:0;transition:transform .3s ease-out;will-change:transform}
+.ptilt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 2%;border-radius:50%;user-select:none;-webkit-user-drag:none}
+.ptilt canvas{position:absolute;left:-25%;top:-25%;width:150%;height:150%;pointer-events:none}
+.psheen{position:absolute;inset:0;border-radius:50%;pointer-events:none;mix-blend-mode:soft-light;opacity:0;transition:opacity .3s}
+.pstage:hover .psheen{opacity:1}
+.pwrap .fi{position:relative}
+.phint{position:absolute;left:calc(100% + 28px);top:38%;transform:none;white-space:normal;width:190px;line-height:1.45;text-align:left;font-size:13px;letter-spacing:.06em;color:var(--o2);opacity:0;transition:opacity .3s;pointer-events:none}
+.pwrap:hover .phint{opacity:1}
+.ph-m{display:none}
+@media (hover:none){.ph-d{display:none}.ph-m{display:inline}}
+@media (hover:none){.phint{opacity:.8}}
+@media (max-width:640px){.phint{position:absolute;left:calc(100% + 14px);top:30%;bottom:auto;transform:none;white-space:normal;text-align:left;width:calc(100vw - 40px - min(54vw,220px) - 14px);max-width:200px;font-size:12.5px;line-height:1.45;opacity:1!important}.ph-d{display:none}.ph-m{display:inline}}
+
+/* ===== MARQUEE ===== */
+.marq{padding:clamp(56px,6vw,90px) 0 0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.row{display:flex;gap:12px;width:max-content;will-change:transform}
+.tl{flex:none;height:clamp(170px,18vw,250px);border-radius:24px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.tl b{font-weight:800;line-height:.95;letter-spacing:-.02em;font-size:clamp(40px,4.6vw,68px)}
+.tl span{font-size:clamp(13px,1.1vw,16px);line-height:1.35;max-width:24ch}
+.tl small{font-size:12px;text-transform:uppercase;letter-spacing:.14em;opacity:.7}
+.t1{width:clamp(280px,28vw,400px);background:var(--card);border:1px solid var(--line)} .t1 b{color:var(--o)}
+.t2{width:clamp(220px,22vw,320px);background:var(--o);color:#1A0A02;justify-content:flex-end} .t2 b{font-size:clamp(34px,3.6vw,54px)}
+.t3{width:clamp(260px,25vw,360px);border:2px solid var(--pale)}
+.t4{width:clamp(240px,23vw,340px);background:var(--pale);color:#0C0C0C} .t4 b{color:var(--o3)}
+.t5{width:clamp(260px,26vw,380px);background:linear-gradient(135deg,#2A1205,#B8400F 55%,#F2A05B);color:#fff;justify-content:flex-end}
+
+/* ===== ABOUT ===== */
+.about{position:relative;overflow-x:clip;min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:80px;padding-bottom:80px;gap:clamp(40px,5vw,64px)}
+.reveal{max-width:620px;text-align:center;font-weight:500;line-height:1.6;font-size:clamp(1.05rem,2vw,1.4rem)}
+.reveal .c{opacity:.2;transition:opacity .15s}
+.reveal .c.on{opacity:1}
+.reveal .hl{color:var(--o)}
+.corner{position:absolute;padding:12px 20px;border-radius:999px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:clamp(12px,1.1vw,15px);white-space:nowrap}
+.corner small{display:block;font-size:10px;letter-spacing:.18em;opacity:.65;margin-bottom:2px}
+.k1{top:8%;left:4%;background:var(--o);color:#1A0A02;--fx:-80px;--fy:0;rotate:-6deg}
+.k2{top:10%;right:4%;border:2px solid var(--pale);--fx:80px;--fy:0;rotate:5deg}
+.k3{bottom:10%;left:8%;border:2px solid var(--o);color:var(--o);--fx:-80px;--fy:0;rotate:4deg}
+.k4{bottom:8%;right:7%;background:var(--pale);color:#0C0C0C;--fx:80px;--fy:0;rotate:-5deg}
+.aboutrow{display:flex;align-items:center;gap:clamp(24px,4vw,56px);max-width:860px}
+.aboutrow .reveal{text-align:left}
+.me{flex:none;width:clamp(120px,15vw,190px);aspect-ratio:1;border-radius:50%;object-fit:cover;object-position:50% 4%;outline:3px solid var(--o);outline-offset:6px;height:auto}
+@media (max-width:640px){.aboutrow{flex-direction:column;text-align:center}.aboutrow .reveal{text-align:center}}
+.openrow{display:none;flex-wrap:wrap;justify-content:center;gap:8px}
+.openrow span{border:1px solid var(--o);color:var(--o);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500}
+@media (max-width:820px){.corner{display:none}.openrow{display:flex}}
+
+/* ===== IMPACT ===== */
+.impact{padding-top:40px;padding-bottom:clamp(90px,10vw,140px)}
+.igrid{max-width:1100px;margin:clamp(48px,6vw,80px) auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.ic{background:var(--card);border:1px solid var(--line);border-radius:32px;padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;gap:14px;transition:border-color .3s,transform .3s}
+.ic:hover{border-color:var(--o);transform:translateY(-4px)}
+.ic b{font-weight:800;letter-spacing:-.03em;line-height:.9;font-size:clamp(52px,7vw,104px);color:var(--o)}
+.ic p{font-size:clamp(15px,1.3vw,18px);line-height:1.5;max-width:42ch}
+.ic .org{margin-top:auto;font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--dim)}
+.ic.hot{background:linear-gradient(140deg,#2A1205 0%,#8A2E06 45%,#E2561F 100%);border:0}
+.ic.hot b{color:#fff}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:4px}
+.flow span{background:rgba(255,255,255,.14);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500}
+.flow i{font-style:normal;opacity:.7}
+details.math summary{cursor:pointer;font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:#FFE1C8;list-style:none}
+details.math summary::-webkit-details-marker{display:none}
+details.math summary::after{content:" +"}
+details.math[open] summary::after{content:" −"}
+.calc{margin-top:12px;display:grid;gap:4px;font-size:14px}
+.calc div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(255,255,255,.15);padding:6px 0}
+.calc em{font-style:normal;font-weight:500;white-space:nowrap}
+
+/* ===== WHAT I DO (white) ===== */
+.svc{background:var(--white);color:var(--ink);border-radius:clamp(40px,5vw,60px) clamp(40px,5vw,60px) 0 0;padding-top:clamp(80px,9vw,128px);padding-bottom:clamp(120px,12vw,180px)}
+.svc .big{color:var(--ink)}
+.svc .sub{text-align:center;margin-top:18px;font-size:clamp(15px,1.4vw,19px);opacity:.6}
+.slist{max-width:1024px;margin:clamp(56px,7vw,100px) auto 0}
+.si{display:flex;gap:clamp(20px,4vw,56px);align-items:flex-start;padding:clamp(28px,3.5vw,48px) 0;border-top:1px solid rgba(12,12,12,.15)}
+.si:last-child{border-bottom:1px solid rgba(12,12,12,.15)}
+.si .n{font-weight:900;line-height:.8;font-size:clamp(3rem,10vw,140px);min-width:1.25em;transition:color .3s}
+.si:hover .n{color:var(--o)}
+.si h3{font-weight:500;text-transform:uppercase;font-size:clamp(1rem,2.2vw,2.1rem);line-height:1.1}
+.si p{font-weight:300;line-height:1.6;max-width:42rem;margin-top:10px;font-size:clamp(.9rem,1.5vw,1.2rem);opacity:.65}
+.si .pt{display:inline-block;margin-top:14px;font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:500;color:var(--o3)}
+
+/* ===== WORK (stacking cards) ===== */
+.work{position:relative;z-index:10;background:var(--bg);border-radius:clamp(40px,5vw,60px) clamp(40px,5vw,60px) 0 0;margin-top:clamp(-56px,-5vw,-40px);padding-top:clamp(80px,9vw,128px);padding-bottom:60px}
+.stack{max-width:1180px;margin:clamp(40px,5vw,72px) auto 0}
+.slot{height:85vh;min-height:620px}
+.pc{position:sticky;transform-origin:50% 0;border-radius:clamp(36px,4.4vw,60px);border:2px solid var(--pale);background:var(--bg);padding:clamp(16px,2vw,32px);display:flex;flex-direction:column;gap:clamp(14px,1.6vw,22px)}
+.pc.lit{border-color:var(--o)}
+.ptop{display:flex;align-items:center;gap:clamp(14px,2.4vw,32px);flex-wrap:wrap;padding:0 clamp(6px,1vw,14px)}
+.ptop .n{font-weight:900;line-height:.8;font-size:clamp(3rem,8vw,120px)}
+.ptop .meta{flex:1;min-width:180px}
+.ptop .meta small{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--o)}
+.ptop .meta h3{font-weight:600;text-transform:uppercase;font-size:clamp(1.2rem,2.6vw,2.4rem);line-height:1.05;margin-top:6px}
+.ptop .meta p{font-size:clamp(14px,1.2vw,17px);color:var(--dim);margin-top:6px;max-width:46ch}
+.pgrid{display:grid;grid-template-columns:2fr 3fr;gap:clamp(10px,1.2vw,16px)}
+.pcol{display:grid;gap:clamp(10px,1.2vw,16px)}
+.pan{border-radius:clamp(28px,3.4vw,48px);padding:clamp(18px,2vw,30px);display:flex;flex-direction:column;justify-content:space-between;gap:10px;overflow:hidden;position:relative}
+.pan.a{height:clamp(130px,15vw,210px)} .pan.b{height:clamp(150px,19vw,290px)}
+.pan h4{font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(15px,1.5vw,22px);line-height:1.1}
+.pan p{font-size:clamp(13px,1.1vw,15px);line-height:1.45;opacity:.85}
+.pan .chips{display:flex;flex-wrap:wrap;gap:6px}
+.pan .chips span{border-radius:999px;padding:5px 11px;font-size:12px;font-weight:500;background:rgba(12,12,12,.08)}
+.v1{background:var(--pale);color:#0C0C0C}
+.v2{background:var(--card);border:1px solid var(--line)}
+.v3{background:linear-gradient(140deg,#2A1205 0%,#B8400F 50%,#F2A05B 100%);color:#fff}
+.v3 .chips span,.v2 .chips span{background:rgba(255,255,255,.12)}
+.v4{background:var(--o);color:#1A0A02}
+.bignum{font-weight:800;letter-spacing:-.03em;line-height:.9;font-size:clamp(40px,5vw,76px)}
+.ln{display:grid;gap:8px}
+.ln div{display:flex;justify-content:space-between;gap:10px;font-size:clamp(13px,1.1vw,15px);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+.ln div b{font-weight:500}
+.wheel{position:absolute;right:-30px;bottom:-30px;width:62%;max-width:300px;aspect-ratio:1;opacity:.95}
+
+/* writing */
+.writing{max-width:1180px;margin:clamp(40px,6vw,80px) auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.wc{border:1px solid var(--line);border-radius:32px;padding:clamp(22px,2.4vw,32px);display:flex;flex-direction:column;gap:12px;min-height:220px;transition:border-color .3s,background .3s}
+.wc:hover{border-color:var(--o);background:var(--card)}
+.wc small{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--o)}
+.wc h3{font-weight:500;font-size:clamp(18px,1.7vw,24px);line-height:1.2}
+.wc p{color:var(--dim);font-size:15px;line-height:1.5}
+.wc .go{margin-top:auto;font-weight:500;text-transform:uppercase;letter-spacing:.12em;font-size:13px}
+.wc:hover .go{color:var(--o)}
+.lab{max-width:1180px;margin:clamp(70px,9vw,120px) auto 0;font-size:13px;text-transform:uppercase;letter-spacing:.18em;color:var(--dim);display:flex;align-items:center;gap:14px}
+.lab::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* ===== EXPERIENCE (flip) ===== */
+.xp{max-width:1180px;margin:clamp(40px,5vw,64px) auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:stretch}
+.flip{all:unset;cursor:pointer;perspective:1200px;display:grid}
+.flip:focus-visible .flip-in{outline:2px solid var(--o);outline-offset:4px}
+.flip-in{position:relative;display:grid;min-height:340px;height:100%;transition:transform .7s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d;border-radius:36px}
+.flip[aria-pressed="true"] .flip-in{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:36px;padding:30px;display:flex;flex-direction:column;gap:14px}
+.front{background:var(--card);border:1px solid var(--line)}
+.back{background:linear-gradient(150deg,#2A1205 0%,#9A3508 55%,#E2561F 100%);color:#fff;transform:rotateY(180deg)}
+.org2{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--o)}
+.back .org2{color:#FFE1C8}
+.ficon svg{width:76px;height:76px;fill:none;stroke:var(--pale);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ficon svg .f{fill:var(--o);stroke:var(--o)}
+.fh{font-weight:500;font-size:clamp(20px,1.9vw,26px);line-height:1.2}
+.frole{color:var(--dim);font-size:14px}
+.hint{margin-top:auto;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--o)}
+.back .hint{color:#FFE1C8}
+.blist{display:grid;gap:10px;font-size:15px;line-height:1.45}
+.blist span{padding-left:16px;position:relative}
+.blist span::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:#FFE1C8}
+.xrows{max-width:1180px;margin:clamp(20px,3vw,32px) auto 0;border-top:1px solid var(--line)}
+.xr{display:grid;grid-template-columns:minmax(160px,1fr) minmax(200px,1.2fr) 2fr;gap:8px 24px;align-items:baseline;padding:18px 4px;border-bottom:1px solid var(--line);transition:background .25s,padding .25s}
+.xr:hover{background:var(--card);padding-left:14px}
+.xr b{font-weight:600;font-size:clamp(17px,1.5vw,21px)}
+.xr:hover b{color:var(--o)}
+.xm{color:var(--dim);font-size:14px}
+.xp2{font-size:14px;line-height:1.45;color:var(--pale)}
+@media (max-width:760px){.xr{grid-template-columns:1fr;gap:4px}}
+.facts{max-width:1180px;margin:22px auto 0;display:flex;flex-wrap:wrap;gap:10px 28px;color:var(--dim);font-size:15px}
+.facts b{color:var(--o);font-weight:500;margin-right:6px}
+
+/* ===== CONTACT ===== */
+.contact{min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:28px;padding-top:100px;padding-bottom:60px}
+.contact .big{font-size:clamp(3.4rem,15vw,220px)}
+.contact p{max-width:52ch;font-size:clamp(16px,1.5vw,20px);line-height:1.55;color:var(--pale)}
+.ctarow{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.vibe{color:var(--dim)!important;font-size:15px!important}
+.vibe .ar{color:var(--o)}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:26px;padding-bottom:30px;border-top:1px solid var(--line);font-size:14px;color:var(--dim)}
+footer a:hover{color:var(--o)}
+
+@media (max-width:900px){
+  .igrid{grid-template-columns:1fr}
+  .writing,.xp{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:1fr}
+  .pan.a,.pan.b{height:auto;min-height:120px}
+  .slot{height:auto;min-height:0;margin-bottom:18px}
+  .pc{position:relative;top:0!important;transform:none!important}
+  .wheel{display:none}
+}
+@media (max-width:640px){
+  .hbot{flex-direction:column;align-items:flex-start}
+  .hr{align-items:flex-start}
+  .hstats{text-align:left;gap:14px}
+  .hstats b{font-size:17px}
+  .hero{height:auto;min-height:100svh}
+  .hero>.pwrap{position:relative;left:auto;top:auto;transform:none;margin:clamp(20px,5vh,40px) 0 clamp(28px,5vh,44px);width:min(54vw,220px)}
+  .si{flex-direction:column;gap:6px}
+}
+@media (min-width:901px) and (max-width:1180px){.xp{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){
+  .fi{opacity:1;transform:none;transition:none}
+  .reveal .c{opacity:1}
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ===== HERO ===== -->
+<section class="hero px" id="top">
+  <canvas id="bgdots" aria-hidden="true"></canvas>
+  <nav class="nav fi" style="--fy:-20px">
+    <a href="#about">About</a><a href="#work">Work</a><a href="#impact">Impact</a><a href="#contact">Contact</a>
+  </nav>
+  <div class="hwrap fi" style="--fy:40px;--d:.15s"><h1 class="grad" id="hh">Hi, I&rsquo;m Avneet<span class="dot">.</span></h1></div>
+
+  <div class="pwrap"><div class="fi" style="--d:.6s">
+    <div class="pstage" id="pstage"><img class="avatar" id="pimg" src="avneet-cut.webp" alt="Avneet Hundel" width="640" height="720"><canvas id="pdots" aria-hidden="true"></canvas></div>
+    <span class="phint"><span class="ph-d"><span class="ar">&larr;</span> Go on, scatter me. Putting messy things back together is my forte.</span><span class="ph-m">Tap to scatter me. Putting messy things back together is my forte.</span></span>
+  </div></div>
+
+  <div class="hbot">
+    <div class="hl fi" style="--fy:20px;--d:.35s">
+      <p><b>Strategy &amp; Chief of Staff · Health tech</b>I build strategy from both ends. Market insight and investor thinking from the top, the customer from the ground, and a plan where they meet</p>
+      <div class="open"><small>Open to</small><span>Strategy &amp; Ops</span><span>Chief of Staff</span></div>
+    </div>
+    <div class="hr fi" style="--fy:20px;--d:.5s">
+      <div class="hstats">
+        <div><b>$33B+</b><span>marketplace thesis rebuilt from hospital visit data</span></div>
+        <div><b>5 year</b><span>platform strategy for a provider data company</span></div>
+        <div><b>$100K</b><span>digital health strategy bid won at EY</span></div>
+      </div>
+      <a class="cbtn" href="#contact">Contact me</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<section class="marq" aria-label="Highlights">
+  <div class="row" id="r1">
+    <div class="tl t3"><small>Consulting</small><b>EY</b><span>Senior Consultant, digital health strategy</span></div>
+    <div class="tl t1"><small>Firmable</small><b>11</b><span>AI tools built for the sales team</span></div>
+    <div class="tl t2"><b>Health tech</b></div>
+    <div class="tl t4"><small>US health tech</small><b>Summit</b><span>Summit Health Advisors, platforms and investors</span></div>
+    <div class="tl t4"><small>Firmable</small><b>$45.7K</b><span>enterprise deal with Xe.com, closed in under a month</span></div>
+    <div class="tl t2"><b>AI tools</b></div>
+    <div class="tl t1"><small>Steer Health</small><b>200+</b><span>qualified leads from one conference</span></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="about px" id="about">
+  <h2 class="big grad fi" style="--fy:40px">About me</h2>
+  <div class="aboutrow">
+    <img class="me fi" src="avneet.jpg" alt="Avneet Hundel" width="640" height="720" loading="lazy">
+    <p class="reveal" id="reveal">Consulting taught me to *size the market*, model the business and pressure test the numbers. Working inside a startup showed me what a plan needs to *survive a busy week*. I bring both, so strategy turns into *a plan people actually run*.</p>
+  </div>
+  <a class="cbtn fi" href="#contact">Contact me</a>
+</section>
+
+<!-- ===== IMPACT ===== -->
+<section class="impact px" id="impact">
+  <h2 class="big grad fi" style="--fy:40px">Impact</h2>
+  <div class="igrid">
+    <div class="ic hot fi">
+      <b>45 to 60 hrs</b>
+      <p>Saved each month by a Claude Code workflow I built. It writes a note on every prospect in HubSpot covering how the account fits our ICP, what&rsquo;s happening in their market and a short guide on how to sell to them. Reps skip the research and go straight to the call, and they made 30% more calls.</p>
+      <div class="flow"><span>ICP fit</span><span>Market context</span><span>How to sell</span><span>Measured · 45 to 60 hrs a month</span></div>
+      <details class="math"><summary>Modeled potential at full team scale</summary>
+        <div class="calc">
+          <div><span>40 accounts × 2 minutes</span><em>80 min per rep a day</em></div>
+          <div><span>80 minutes × 10 reps</span><em>13.3 hrs a day</em></div>
+          <div><span>13.3 hours × 5 days × 4 weeks</span><em>~266 hrs a month, modeled</em></div>
+          <div><span>80 min back ÷ 15 min calls × 10 reps</span><em>50 more calls a day</em></div>
+          <div><span>50 calls × $40 × 20 days</span><em>$40K a month potential</em></div>
+        </div>
+      </details>
+      <span class="org" style="color:#FFE1C8">Firmable · 11 AI tools</span>
+    </div>
+    <div class="ic fi" style="--d:.1s"><b data-count="100" data-pre="$" data-suf="K">$100K</b><p>Digital health strategy bid won at EY, a $100K government contract. I was the subject matter expert on the bid, the only one on the team who had designed this kind of strategy before. I curated the pitch with support from leadership and sat on the final interview panel. Alongside it, I designed digital health strategies for large health system clients.</p><span class="org">EY</span></div>
+    <div class="ic fi" style="--d:.1s"><b data-count="40" data-pre="~" data-suf="%">~40%</b><p>Lift in client and investor engagement from an insights playbook I designed to track deal flow, platform usage and market trends. I also assessed platform startups for investment with Insight Partners.</p><span class="org">Summit Health Advisors</span></div>
+    <div class="ic fi" style="--d:.2s"><b>M&amp;A</b><p>Strategic and marketing plans for a hospital newly acquired by a national health system. I mapped its service lines, strengths and gaps, and where it could grow under new ownership.</p><span class="org">Steer Health</span></div>
+  </div>
+</section>
+
+<!-- ===== WHAT I DO ===== -->
+<section class="svc px">
+  <h2 class="big fi" style="--fy:40px">What I do</h2>
+  <p class="sub fi">Where to win. What it takes. How we&rsquo;ll know.</p>
+  <div class="slist">
+    <div class="si fi"><span class="n">01</span><div><h3>Market sizing, trends &amp; investor insight</h3><p>Bottom up market sizing from public data, trend analysis for leadership, and the read investors need on whether a business is worth backing.</p><span class="pt">Assessed platform startups with Insight Partners · rebuilt a $33B+ marketplace thesis · 2023 State of Healthcare Platforms Report</span></div></div>
+    <div class="si fi" style="--d:.1s"><span class="n">02</span><div><h3>Platform strategy &amp; flywheels</h3><p>Shifting businesses from pipeline models like SaaS to platforms, where every new customer or partner adds value for the next. I design the flywheel, solve the cold start and price for network growth.</p><span class="pt">Pipeline to platform strategy for a provider data company · flywheel for a premium longevity clinic</span></div></div>
+    <div class="si fi" style="--d:.2s"><span class="n">03</span><div><h3>Pricing &amp; business models</h3><p>Benchmarks, pricing tiers and revenue models built from the market up, so pricing is a strategy and not a guess.</p><span class="pt">GLP-1 pricing benchmark across Hims &amp; Hers, Ro and others found room to raise prices</span></div></div>
+    <div class="si fi" style="--d:.3s"><span class="n">04</span><div><h3>Competitive &amp; customer analysis</h3><p>Competitor teardowns and customer journeys walked click by click, to find where value leaks and where to differentiate.</p><span class="pt">Mapped a national provider&rsquo;s booking journey to find where patients dropped off</span></div></div>
+    <div class="si fi" style="--d:.4s"><span class="n">05</span><div><h3>Strategy into an operating plan</h3><p>Five year plans with product tiers, rollout thresholds, metrics and milestones, so the strategy deck becomes a roadmap.</p><span class="pt">Five year plan with pricing tiers, rollout thresholds and milestones</span></div></div>
+    <div class="si fi" style="--d:.5s"><span class="n">06</span><div><h3>Chief of Staff range</h3><p>Executive briefings, investor analysis and org design, plus the hands on sales, marketing and ops work that lands on a founder&rsquo;s desk. From sales pitches and pipeline to campaigns, messaging and the AI tools that give the team hours back.</p><span class="pt">CEO level support at Steer, from org redesign to sales pitches and campaigns · $400K+ pipeline and AI ops workflows at Firmable</span></div></div>
+  </div>
+</section>
+
+<!-- ===== WORK ===== -->
+<section class="work px" id="work">
+  <h2 class="big grad fi" style="--fy:40px">Work</h2>
+  <div class="stack" id="stack">
+    <div class="slot"><article class="pc">
+      <div class="ptop"><span class="n grad">01</span><div class="meta"><small>Case study · Personal project</small><h3>Longevity Flywheel</h3><p>How I design a growth flywheel, applied to a premium clinic.</p></div><a class="gbtn" href="longevity.html">Read <span class="ar">→</span></a></div>
+      <div class="pgrid">
+        <div class="pcol">
+          <div class="pan a v2"><h4>Acquire</h4><p>Which members to win first, and through which channel</p></div>
+          <div class="pan b v4"><h4>Retain</h4><p>Why members stay, and what makes each one worth more over time</p></div>
+        </div>
+        <div class="pan v3"><h4>The flywheel</h4><p style="max-width:30ch">Each turn makes the next one cheaper. Data, outcomes and referrals feed back into growth.</p>
+          <svg class="wheel" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-dasharray="6 8"/><g fill="#fff"><circle cx="100" cy="30" r="12"/><circle cx="170" cy="100" r="12"/><circle cx="100" cy="170" r="12"/><circle cx="30" cy="100" r="12"/></g><circle cx="100" cy="100" r="22" fill="#1A0A02"/></svg></div>
+      </div>
+    </article></div>
+    <div class="slot"><article class="pc">
+      <div class="ptop"><span class="n grad">02</span><div class="meta"><small>Deal strategy · Flagship</small><h3>A business case in five minutes</h3><p>Big accounts stall on budget, not product. This logic turns the buyer's numbers into a case their CFO approves.</p></div><a class="gbtn" href="#contact">Ask for a walkthrough</a></div>
+      <div class="pgrid">
+        <div class="pcol">
+          <div class="pan a v1"><h4>1 · Their numbers</h4><div class="chips"><span>Team size</span><span>Salaries</span><span>Hours lost</span><span>Funnel rates</span><span>Deal value</span></div></div>
+          <div class="pan b v2"><h4>2 · Three scenarios</h4><div class="ln"><div><b>Time</b><span>hours given back</span></div><div><b>Pipeline</b><span>more meetings</span></div><div><b>Revenue</b><span>higher win rates</span></div></div></div>
+        </div>
+        <div class="pan v3"><h4>3 · The case a CFO approves</h4><div><div class="bignum">ROI</div><p style="margin-top:8px">Year 1 net benefit, payback in months, and a side by side of every plan, so the buyer picks a tier instead of a yes or no.</p></div></div>
+      </div>
+    </article></div>
+    <div class="slot"><article class="pc">
+      <div class="ptop"><span class="n grad">03</span><div class="meta"><small>Interactive site · Sales floor</small><h3>Call Intelligence Hub</h3><p>Sales calls turned into objection guides, personas and battlecards the whole team can use.</p></div><a class="gbtn" href="call-intel.html">Explore <span class="ar">→</span></a></div>
+      <div class="pgrid">
+        <div class="pcol">
+          <div class="pan a v4"><h4>Objection guides</h4><p>What buyers actually said, and what worked in reply</p></div>
+          <div class="pan b v2"><h4>Personas</h4><div class="chips"><span>Sales leader</span><span>RevOps</span><span>Founder</span><span>Marketing</span></div><p>Built from real conversations, not guesses</p></div>
+        </div>
+        <div class="pan v1"><h4>Battlecards</h4><div class="ln"><div style="border-color:rgba(12,12,12,.15)"><b>Where we win</b><span>proof points</span></div><div style="border-color:rgba(12,12,12,.15)"><b>Where they push back</b><span>common objections</span></div><div style="border-color:rgba(12,12,12,.15)"><b>What to say</b><span>lines that landed</span></div></div><p>Turned into guides and AI tools for the sales team</p></div>
+      </div>
+    </article></div>
+    <div class="slot"><article class="pc">
+      <div class="ptop"><span class="n grad">04</span><div class="meta"><small>Framework · Personal project</small><h3>GTM Launch Framework</h3><p>A step by step framework for taking a product to market.</p></div><a class="gbtn" href="launch-kit.html">Open <span class="ar">→</span></a></div>
+      <div class="pgrid">
+        <div class="pcol">
+          <div class="pan a v1"><h4>Pre work</h4><p>The questions to answer before anyone writes a slide</p></div>
+          <div class="pan b v4"><div class="bignum">40+</div><h4>AI prompts</h4></div>
+        </div>
+        <div class="pan v2"><h4>From pre work to metrics</h4><div class="ln"><div><b>Audience</b><span>who it is for</span></div><div><b>Message</b><span>why it matters</span></div><div><b>Channels</b><span>where to show up</span></div><div><b>Metrics</b><span>how we know</span></div></div></div>
+      </div>
+    </article></div>
+  </div>
+
+  <div class="lab">Writing on Substack</div>
+  <div class="writing">
+    <a class="wc fi" href="https://substack.com/home/post/p-215871626" target="_blank" rel="noopener"><small>Essay</small><h3>The magic pill that needs a plan</h3><p>Why GLP-1s need holistic care around them.</p><span class="go">Read <span class="ar">↗</span></span></a>
+    <a class="wc fi" style="--d:.1s" href="https://substack.com/home/post/p-206799111" target="_blank" rel="noopener"><small>Guide</small><h3>How to use AI within your business</h3><p>My Process Before Tool framework for AI.</p><span class="go">Read <span class="ar">↗</span></span></a>
+    <a class="wc fi" style="--d:.2s" href="https://substack.com/home/post/p-219373035" target="_blank" rel="noopener"><small>Essay</small><h3>How Heidi Health went global</h3><p>The global first growth motion behind an Aussie unicorn.</p><span class="go">Read <span class="ar">↗</span></span></a>
+  </div>
+
+  <div class="lab">Where the strategy comes from · tap a card</div>
+  <div class="xp">
+    <button class="flip fi" type="button" aria-pressed="false" aria-label="EY. Show details">
+      <span class="flip-in">
+        <span class="face front"><span class="org2">EY</span><span class="ficon"><svg viewBox="0 0 96 96" aria-hidden="true"><rect x="14" y="58" width="22" height="22" rx="3"/><rect x="38" y="58" width="22" height="22" rx="3"/><rect x="62" y="58" width="22" height="22" rx="3" class="f"/><rect x="26" y="34" width="22" height="22" rx="3"/><rect x="50" y="34" width="22" height="22" rx="3"/><rect x="38" y="10" width="22" height="22" rx="3" class="f"/></svg></span><span class="fh">Built operations from zero, under pressure</span><span class="frole">Senior Consultant · Australia · 2020 to 2023</span><span class="hint">Tap to see the work <span class="ar">↻</span></span></span>
+        <span class="face back"><span class="org2">EY</span><span class="blist"><span>Part of the team that built a COVID-19 response operation from scratch, with no playbook</span><span>Subject matter expert on a $100K digital health strategy bid for a government client, which we won. Curated the pitch with support from leadership and sat on the final interview panel</span><span>Digital health strategy for large health systems</span></span><span class="hint">Tap to flip back <span class="ar">↻</span></span></span>
+      </span>
+    </button>
+    <button class="flip fi" style="--d:.1s" type="button" aria-pressed="false" aria-label="Summit Health Advisors. Show details">
+      <span class="flip-in">
+        <span class="face front"><span class="org2">Summit Health Advisors</span><span class="ficon"><svg viewBox="0 0 96 96" aria-hidden="true"><path d="M14 78 L34 54 L50 64 L80 22"/><path d="M66 22 H80 V36"/><circle cx="34" cy="54" r="4" class="f"/><circle cx="50" cy="64" r="4" class="f"/><path d="M14 84 H84"/></svg></span><span class="fh">Helped investors and founders read the US digital health market</span><span class="frole">Senior Consultant · US · 2023 to 2024</span><span class="hint">Tap to see the work <span class="ar">↻</span></span></span>
+        <span class="face back"><span class="org2">Summit Health Advisors</span><span class="blist"><span>Rebuilt a $33B+ marketplace thesis bottom up from hospital visit data</span><span>Helped shape a five year platform strategy for a provider data company</span><span>Assessed platform startups for investment with Insight Partners</span><span>Contributed to the 2023 State of Healthcare Platforms Report</span></span><span class="hint">Tap to flip back <span class="ar">↻</span></span></span>
+      </span>
+    </button>
+    <button class="flip fi" style="--d:.2s" type="button" aria-pressed="false" aria-label="Steer Health. Show details">
+      <span class="flip-in">
+        <span class="face front"><span class="org2">Steer Health</span><span class="ficon"><svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="44" cy="44" r="26"/><circle cx="44" cy="44" r="14"/><circle cx="44" cy="44" r="4" class="f"/><path d="M63 63 L82 82"/></svg></span><span class="fh">Strategy inside a seed stage startup</span><span class="frole">Business Generalist · US · 2025</span><span class="hint">Tap to see the work <span class="ar">↻</span></span></span>
+        <span class="face back"><span class="org2">Steer Health</span><span class="blist"><span>Benchmarked GLP-1 pricing across telehealth competitors and found room to raise prices</span><span>Walked a national provider's booking journey click by click to find where patients dropped off</span><span>Strategic analysis for a hospital newly acquired by a national health system</span></span><span class="hint">Tap to flip back <span class="ar">↻</span></span></span>
+      </span>
+    </button>
+    <button class="flip fi" style="--d:.3s" type="button" aria-pressed="false" aria-label="Firmable. Show details">
+      <span class="flip-in">
+        <span class="face front"><span class="org2">Firmable</span><span class="ficon"><svg viewBox="0 0 96 96" aria-hidden="true"><path d="M16 22 H70 a8 8 0 0 1 8 8 V54 a8 8 0 0 1 -8 8 H40 L26 74 V62 H16 a8 8 0 0 1 -8 -8 V30 a8 8 0 0 1 8 -8 Z"/><circle cx="28" cy="42" r="4" class="f"/><circle cx="43" cy="42" r="4" class="f"/><circle cx="58" cy="42" r="4" class="f"/><path d="M80 12 L84 20 L92 24 L84 28 L80 36 L76 28 L68 24 L76 20 Z" class="f"/></svg></span><span class="fh">Made the sales calls, then built the AI tools to fix what slowed them down</span><span class="frole">GTM &amp; Sales Development · Australia · 2026</span><span class="hint">Tap to see the work <span class="ar">↻</span></span></span>
+        <span class="face back"><span class="org2">Firmable</span><span class="blist"><span>Built a Claude Code workflow that writes an ICP note and selling guide on every HubSpot prospect, saving 45 to 60 hours a month and lifting calls by 30%</span><span>Built an AI pipeline that turns call transcripts into objection guides and ICP frameworks</span><span>Closed a $45.7K enterprise deal with Xe.com in under a month</span><span>Daily competitor digest built in n8n for the growth team</span></span><span class="hint">Tap to flip back <span class="ar">↻</span></span></span>
+      </span>
+    </button>
+  </div>
+  <div class="facts"><span><b>Languages</b>English, Spanish, Hindi, Punjabi</span><span><b>Education</b>Monash University, Warwick exchange scholar</span></div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact px" id="contact">
+  <h2 class="big grad fi" style="--fy:40px">Let&rsquo;s talk<span class="dot">.</span></h2>
+  <p class="fi" style="--d:.15s">Got a big strategic question and no one with the time to own it? I&rsquo;ll size it, model it and turn it into a plan your team can run.</p>
+  <div class="fi ctarow" style="--d:.3s"><a class="cbtn" href="https://calendly.com/avneet-hundel/30min" target="_blank" rel="noopener">Book a 30 min chat <span class="ar">↗</span></a><a class="gbtn" href="https://www.linkedin.com/in/avneet-hundel" target="_blank" rel="noopener">Message me on LinkedIn <span class="ar">↗</span></a></div>
+  <p class="vibe fi" style="--d:.4s"><span class="ar">✦</span> P.S. I vibe coded this whole site, including the case studies, with Claude Code.</p>
+</section>
+<footer class="px"><span>© 2026 Avneet Hundel · Vibe coded with Claude</span><a href="https://www.linkedin.com/in/avneet-hundel" target="_blank" rel="noopener">LinkedIn <span class="ar">↗</span></a></footer>
+
+<script>
+(function(){
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // fit the hero name to the width
+  const hh = document.getElementById('hh');
+  const fit = () => { hh.style.fontSize = '100px'; const w = hh.parentElement.clientWidth; hh.style.fontSize = Math.min(100 * w / hh.getBoundingClientRect().width * .98, innerHeight * .3) + 'px'; };
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit); fit(); addEventListener('resize', fit);
+
+  // fade ins
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {rootMargin: '50px 0px', threshold: 0});
+  document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+  // count ups
+  const co = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return; co.unobserve(e.target);
+    const el = e.target, to = +el.dataset.count, pre = el.dataset.pre || '', suf = el.dataset.suf || '', dec = +(el.dataset.dec || 0);
+    if (reduced) return; const t0 = performance.now();
+    const tick = now => { const p = Math.min(1, (now - t0) / 1400), v = to * (1 - Math.pow(1 - p, 3)); el.textContent = pre + v.toFixed(dec) + suf; if (p < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }), {threshold: .4});
+  document.querySelectorAll('[data-count]').forEach(el => co.observe(el));
+
+  // marquee rows: triple, then move with scroll
+  const r1 = document.getElementById('r1');
+  [r1].forEach(r => { const h = r.innerHTML; r.innerHTML = h + h + h; r.querySelectorAll('.tl').forEach((t, i) => { if (i >= r.children.length / 3) t.setAttribute('aria-hidden', 'true'); }); });
+  const marq = r1.parentElement;
+  // keep the row moving on its own, looping forever, and let scrolling push it along
+  let drift = 0, setW = 0, mvis = true, lastT = performance.now();
+  const measure = () => { setW = r1.scrollWidth / 3; };
+  measure(); addEventListener('resize', measure); if (document.fonts) document.fonts.ready.then(measure);
+  new IntersectionObserver(es => { mvis = es[0].isIntersecting; }).observe(marq);
+  const loop = now => {
+    requestAnimationFrame(loop);
+    const dt = Math.min(.05, (now - lastT) / 1000); lastT = now;
+    if (reduced || !mvis || !setW) return;
+    drift += dt * 40;
+    const scrollPart = (scrollY - (marq.getBoundingClientRect().top + scrollY) + innerHeight) * .3;
+    const x = ((drift + scrollPart) % setW + setW) % setW;
+    r1.style.transform = 'translateX(' + (-x) + 'px)';
+  };
+  requestAnimationFrame(loop);
+
+  // scroll reveal paragraph, letter by letter
+  const rv = document.getElementById('reveal');
+  const raw = rv.textContent; rv.textContent = ''; let hl = false; const chars = [];
+  for (const ch of raw) { if (ch === '*') { hl = !hl; continue; } const s = document.createElement('span'); s.className = 'c' + (hl ? ' hl' : ''); s.textContent = ch; rv.appendChild(s); chars.push(s); }
+  rv.setAttribute('aria-label', raw.replace(/\*/g, ''));
+
+  // stacking work cards
+  const stack = document.getElementById('stack'), cards = [...stack.querySelectorAll('.pc')], n = cards.length;
+  cards.forEach((c, i) => c.style.top = 'calc(clamp(80px,9vw,128px) + ' + (i * 28) + 'px)');
+
+  let ticking = false;
+  function onScroll(){
+    ticking = false;
+    const vh = innerHeight;
+    // marquee
+    // reveal
+    const rr = rv.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (vh * .8 - rr.top) / ((vh * .8 - vh * .2) + rr.height)));
+    const lit = reduced ? chars.length : Math.round(p * chars.length);
+    for (let i = 0; i < chars.length; i++) chars[i].classList.toggle('on', i < lit);
+    // stack
+    if (innerWidth > 900) {
+      const sr = stack.getBoundingClientRect(), prog = Math.max(0, Math.min(1, -sr.top / Math.max(1, sr.height - vh)));
+      cards.forEach((c, i) => {
+        const target = 1 - (n - 1 - i) * .03, start = i / n;
+        const t = Math.max(0, Math.min(1, (prog - start) / (1 - start)));
+        c.style.transform = 'scale(' + (1 - (1 - target) * t) + ')';
+        const cr = c.getBoundingClientRect(); c.classList.toggle('lit', cr.top < vh * .5 && cr.bottom > vh * .3);
+      });
+    }
+  }
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, {passive: true});
+  addEventListener('resize', onScroll); onScroll();
+
+  // flip cards
+  document.querySelectorAll('.flip').forEach(f => f.addEventListener('click', () => f.setAttribute('aria-pressed', String(f.getAttribute('aria-pressed') !== 'true'))));
+})();
+</script>
+<script>
+// Particle portrait: the photo becomes dots that gather into a face, scatter from the cursor and settle back.
+(function(){
+  const stage = document.getElementById('pstage'), cv = document.getElementById('pdots'), img = document.getElementById('pimg');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ctx = cv.getContext('2d');
+  let P = [], W = 0, H = 0, dpr = 1, mx = -1e4, my = -1e4, pmx = 0, pmy = 0, active = 0, ready = false;
+
+  function build(){
+    const r = cv.getBoundingClientRect(); dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const sw = W / 1.6, sh = H / 1.6, ox = W * .3 / 1.6 * 1.6 * .3125, step = Math.max(3, Math.round(sw / 110));
+    const gx = Math.floor(sw / step), gy = Math.floor(sh / step);
+    const o = document.createElement('canvas'); o.width = gx; o.height = gy;
+    const oc = o.getContext('2d', {willReadFrequently: true}); oc.drawImage(img, 0, 0, gx, gy);
+    let d; try { d = oc.getImageData(0, 0, gx, gy).data; } catch (e) { return false; }
+    const left = (W - sw) / 2, top = (H - sh) / 2, old = P; P = [];
+    for (let y = 0; y < gy; y++) for (let x = 0; x < gx; x++){
+      // the photo is already cut out, so transparent pixels are background; soft edges thin out
+      const i = y * gx + x, al = d[i*4+3]; if (al < 60 || (al < 235 && Math.random() > al / 255)) continue;
+      let r = d[i*4], g = d[i*4+1], b = d[i*4+2];
+      // warm the palette a touch so it sits with the orange
+      const L = v => 255 * Math.pow(v / 255, .72); r = Math.min(255, L(r) * 1.05 + 10); g = L(g); b = L(b) * .9;
+      const lum = (r*.3 + g*.59 + b*.11) / 255;
+      const hx = left + x * step + step / 2, hy = top + y * step + step / 2;
+      const a = Math.random() * Math.PI * 2, R = Math.max(W, H) * (.6 + Math.random() * .6);
+      const p = old.length ? old[(P.length) % old.length] : null;
+      P.push({hx, hy, x: reduced ? hx : (p ? p.x : W/2 + Math.cos(a) * R), y: reduced ? hy : (p ? p.y : H/2 + Math.sin(a) * R), vx: 0, vy: 0,
+        s: step * (.62 + (1 - lum) * .3), c: 'rgb(' + (r|0) + ',' + (g|0) + ',' + (b|0) + ')', ph: Math.random() * 6.28});
+    }
+    // a sprinkle of orange dots through the face
+    for (let k = 0; k < P.length; k += 23) P[k].c = Math.random() < .5 ? '#F2823A' : '#FFB27A';
+    active = 1; return true;
+  }
+
+  // once the dots settle they hand over to the real photo; touching the face turns it back into dots
+  let photo = false, calm = 0, born = 0;
+  const setPhoto = on => { photo = on; calm = 0; stage.classList.toggle('photo', on); };
+  function frame(t){
+    requestAnimationFrame(frame);
+    if (!ready || active <= 0) return;
+    if (!born) born = t;
+    ctx.clearRect(0, 0, W, H);
+    const R = Math.max(50, W * .14), R2 = R * R, sp = Math.hypot(mx - pmx, my - pmy); pmx = mx; pmy = my;
+    let moving = 0, hit = false;
+    for (const p of P){
+      const dx = p.x - mx, dy = p.y - my, d2 = dx*dx + dy*dy;
+      if (d2 < R2 && sp > .5) hit = true;
+      if (d2 < R2){ const d = Math.sqrt(d2) || 1, f = (1 - d / R) * (2.2 + Math.min(sp, 40) * .12); p.vx += dx / d * f; p.vy += dy / d * f; }
+      const bx = reduced ? 0 : Math.sin(t * .0012 + p.ph) * .35, by = reduced ? 0 : Math.cos(t * .001 + p.ph) * .35;
+      p.vx += (p.hx + bx - p.x) * .045; p.vy += (p.hy + by - p.y) * .045;
+      p.vx *= .86; p.vy *= .86; p.x += p.vx; p.y += p.vy;
+      moving += Math.abs(p.vx) + Math.abs(p.vy);
+      ctx.fillStyle = p.c; ctx.fillRect(p.x - p.s/2, p.y - p.s/2, p.s, p.s);
+    }
+    if (photo && hit) setPhoto(false);
+    else if (!photo && !reduced){ calm = moving / P.length < .08 ? calm + 1 : 0; if (calm > 35 && t - born > 1800) setPhoto(true); }
+    // keep a slow shimmer going while the hero is on screen
+    active = (moving / P.length > .02 || onScreen) ? 1 : active - .05;
+  }
+  let onScreen = true;
+  new IntersectionObserver(es => { onScreen = es[0].isIntersecting; if (onScreen) active = 1; }).observe(cv);
+
+  addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; active = 1; }, {passive: true});
+  document.addEventListener('pointerleave', () => { mx = my = -1e4; });
+  stage.addEventListener('pointerdown', e => {
+    setPhoto(false);
+    const r = cv.getBoundingClientRect(), cx = e.clientX - r.left, cy = e.clientY - r.top;
+    for (const p of P){ const dx = p.x - cx, dy = p.y - cy, d = Math.hypot(dx, dy) || 1, f = 900 / (d + 40); p.vx += dx / d * f * (.6 + Math.random() * .8); p.vy += dy / d * f * (.6 + Math.random() * .8); }
+    active = 1;
+  });
+  const go = () => { if (build()){ ready = true; stage.classList.add('live'); requestAnimationFrame(frame); } };
+  if (img.complete && img.naturalWidth) go(); else img.addEventListener('load', go);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (ready) build(); }, 200); });
+})();
+
+// Drifting dots behind the hero, nudged by the cursor
+(function(){
+  const cv = document.getElementById('bgdots'), ctx = cv.getContext('2d'), hero = cv.parentElement;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let W, H, D = [], mx = -1e4, my = -1e4, vis = true;
+  const size = () => { const dpr = Math.min(devicePixelRatio || 1, 2); W = hero.clientWidth; H = hero.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(W * H / 9000); D = Array.from({length: n}, () => ({x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, r: Math.random() * 1.6 + .4, o: Math.random() < .35})); };
+  size(); addEventListener('resize', size);
+  hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+  hero.addEventListener('pointerleave', () => { mx = my = -1e4; });
+  new IntersectionObserver(es => vis = es[0].isIntersecting).observe(hero);
+  (function f(){ requestAnimationFrame(f); if (!vis) return; ctx.clearRect(0, 0, W, H);
+    for (const d of D){ const dx = d.x - mx, dy = d.y - my, q = dx*dx + dy*dy; if (q < 14400){ const k = (1 - Math.sqrt(q) / 120) * .6; d.vx += dx / 120 * k; d.vy += dy / 120 * k; }
+      d.vx *= .98; d.vy *= .98; d.vx += (Math.random() - .5) * .02; d.vy += (Math.random() - .5) * .02; d.x += d.vx; d.y += d.vy;
+      if (d.x < 0) d.x += W; if (d.x > W) d.x -= W; if (d.y < 0) d.y += H; if (d.y > H) d.y -= H;
+      ctx.globalAlpha = d.o ? .7 : .25; ctx.fillStyle = d.o ? '#F2823A' : '#EFE4DA'; ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.283); ctx.fill(); }
+    ctx.globalAlpha = 1; })();
+})();
+</script>
+
+</body>
+</html>

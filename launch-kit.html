@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GTM Launch Framework</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap">
+<style>
+/* Layout: a field guide. Sticky step list on the left, one long column of steps on the right. Each step = purpose, a worked example, the anatomy of each element, AI prompts and a check. */
+:root{
+  --bg:#0C0C0C; --surface:#151312; --ink:#EFE4DA; --muted:#A89C93; --line:#2B2522;
+  --accent:#F2823A; --accent-soft:#2E1A0F; --on-accent:#FFFFFF; --fill:#E2561F; --sandy:#FFB27A; --apricot:#F2823A;
+  --slide:#151312; --slide-ink:#EFE4DA; --slide-muted:#A89C93;
+  --display:'Kanit', system-ui, sans-serif;
+  --body:'Kanit', system-ui, sans-serif;
+  --mono:'Kanit', system-ui, sans-serif;
+  color-scheme:dark;
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.12;text-wrap:balance}
+h4{margin:0;font-size:16px;font-weight:600}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+
+.topbar{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:12px;padding-block:14px;border-bottom:1px solid var(--line)}
+.topbar .back{text-decoration:none;color:var(--muted);font-size:14px}
+.topbar b{font-family:var(--display);font-size:20px;font-weight:800}
+.topbar .badge{margin-left:auto;font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+
+.hero{max-width:1240px;margin:0 auto;padding-block:48px 28px;display:grid;gap:14px}
+.hero h1{font-size:clamp(36px,6vw,64px);font-weight:800;letter-spacing:-.02em;max-width:24ch}
+.hero p{max-width:66ch;color:var(--muted);font-size:18px}
+.toc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.toc-chips span{font-size:13px;padding:5px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:36px;padding-block:10px 80px}
+@media (max-width:940px){.shell{grid-template-columns:minmax(0,1fr)}}
+.nav{position:sticky;top:16px;align-self:start;display:grid;gap:2px}
+@media (max-width:940px){.nav{position:static;display:flex;overflow-x:auto;gap:6px;padding-bottom:6px}}
+.nav a{display:flex;gap:10px;padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;white-space:nowrap}
+.nav a span{font-family:var(--mono);font-size:11px;opacity:.75;padding-top:2px}
+.nav a.on{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+
+.steps{display:grid;gap:64px;min-width:0}
+.step{display:grid;gap:22px;scroll-margin-top:20px;min-width:0}
+.step-head{display:grid;gap:8px;max-width:72ch}
+.step-head .num{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.step-head h2{font-size:clamp(28px,3.6vw,40px);font-weight:800;letter-spacing:-.02em}
+.does{font-size:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+
+/* worked example panel */
+.mock{background:var(--slide);color:var(--slide-ink);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2.6vw,30px);display:grid;gap:14px;container-type:inline-size;position:relative}
+.mock .tag{position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--slide-muted)}
+.mock h3{font-family:var(--display);font-weight:700;font-size:clamp(18px,3cqi,28px);line-height:1.2;padding-right:110px}
+.mock .band{background:var(--accent-soft);border-radius:8px;padding:10px 12px;font-size:clamp(12px,1.5cqi,14.5px);line-height:1.45}
+.mock .pains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.mock .pains,.mock .three{grid-template-columns:1fr!important}}
+.mock .pain{border:2px solid var(--apricot);border-top:0;display:grid}
+.mock .pain b{background:var(--apricot);color:var(--ink);padding:8px 10px;text-align:center;font-weight:600;font-size:clamp(13px,1.8cqi,17px)}
+.mock .pain p{padding:14px 12px;text-align:center;font-size:clamp(12px,1.45cqi,14px)}
+.mock .pain:nth-child(1){border-color:var(--fill)}.mock .pain:nth-child(1) b{background:var(--fill);color:#fff}
+.mock .pain:nth-child(3){border-color:var(--sandy)}.mock .pain:nth-child(3) b{background:var(--sandy)}
+.mock .result{border:2px dashed var(--fill);padding:10px 12px;font-size:clamp(12px,1.45cqi,14px);position:relative;margin-top:10px}
+.mock .result{background:var(--bg)}
+.mock .result span{position:absolute;top:-13px;left:10px;background:var(--fill);color:#fff;font-weight:700;font-size:12px;padding:2px 10px}
+.mock .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mock .feat{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:12px;display:grid;gap:6px;align-content:start;font-size:clamp(12px,1.4cqi,14px)}
+.mock .feat .fk{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.mock .feat b{font-size:clamp(13px,1.6cqi,15px)}
+.mock .engine{background:var(--fill);color:#fff;border-radius:8px;padding:10px 12px;font-weight:600;font-size:clamp(13px,1.6cqi,15px)}
+.mock .muted2{color:var(--slide-muted)}
+
+/* message house mock */
+.mh{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr);gap:6px;font-size:clamp(11.5px,1.4cqi,14px)}
+.mh .l{background:var(--accent-soft);border-radius:8px;padding:9px 8px;text-align:center;font-weight:600;display:grid;place-items:center}
+.mh .l.hot{background:var(--apricot);color:var(--ink)}
+.mh .r{display:grid;gap:6px;min-width:0}
+.mh .r.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mh .c{border:1px solid var(--fill);border-radius:8px;padding:9px 10px;text-align:center;display:grid;place-items:center}
+.mh .c.hot{background:var(--apricot);color:var(--ink);font-weight:700;border-color:var(--apricot)}
+.mh .c.bold{font-weight:700}
+@media (max-width:560px){.mh{grid-template-columns:1fr}.mh .r.c3{grid-template-columns:1fr}}
+
+/* anatomy */
+.anat{display:grid;gap:14px}
+.part{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.part .pn{width:34px;height:34px;border-radius:50%;background:var(--fill);color:#fff;display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:500}
+.part .pb{display:grid;gap:10px;min-width:0}
+.part h4{font-size:18px;font-family:var(--display);font-weight:700}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.row3{grid-template-columns:1fr}}
+.cell{display:grid;gap:4px;align-content:start;min-width:0}
+.cell .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.formula{font-family:var(--mono);font-size:13px;background:var(--accent-soft);border-radius:8px;padding:10px 12px;line-height:1.5}
+.formula i{font-style:normal;color:var(--accent)}
+.ex{font-size:14.5px;border-left:3px solid var(--fill);padding-left:12px}
+.ex small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+.tips{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14.5px}
+
+.callout{background:var(--sandy);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.callout h4{font-family:var(--display);font-size:19px;font-weight:700}
+
+/* prompts */
+.prompts{display:grid;gap:10px}
+.prompts > .k{margin-bottom:2px}
+.prompt{background:var(--ink);color:var(--bg);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}
+.prompt p{font-family:var(--mono);font-size:13px;line-height:1.55;white-space:pre-wrap}
+.prompt .pt{grid-column:1 / -1;font-family:var(--body);font-weight:600;font-size:13px;color:var(--apricot)}
+.copy{font:600 12px var(--body);background:var(--fill);color:#fff;border:0;border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+
+/* check */
+.check{display:grid;gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer}
+.check input{accent-color:var(--fill);width:17px;height:17px;margin-top:3px;flex:none}
+
+.timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:3px solid var(--fill);font-size:13px}
+.timeline div{padding:10px 10px 0 0}
+.timeline b{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500}
+@media (max-width:640px){.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.metrics{grid-template-columns:1fr}}
+.metrics div{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:12px;display:grid;gap:2px}
+.metrics b{font-family:var(--display);font-size:clamp(26px,4.5cqi,40px);font-weight:800;color:var(--accent);line-height:1.1}
+.metrics span{font-size:13px}
+
+.foot{max-width:1240px;margin:0 auto;border-top:1px solid var(--line);padding-block:20px 40px;font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;z-index:60}
+
+.ar{font-family:"Segoe UI Symbol","Segoe UI",system-ui,-apple-system,sans-serif;font-weight:400}
+
+/* dark theme to match the main page */
+:root{color-scheme:dark}
+body{font-weight:300;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:700;letter-spacing:-.015em}
+h1{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;background:linear-gradient(180deg,#6E6259 0%,#F3E4D6 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+b,strong{font-weight:600}
+a{color:var(--accent)}
+::selection{background:#F2823A;color:#0C0C0C}
+.banner,.pill.flat,.node.human,.chips span,.mock .pain b,.mh .l.hot,.mh .c.hot,.callout,.mock .pain:nth-child(3) b,.mh .l.hot *,.callout *{color:#1A0A02}
+.mock .pain:nth-child(1) b{color:#fff}
+.prompt{background:#1C1917;color:var(--ink);border:1px solid var(--line)}
+.callout [style*="background"],.callout [style*="background"] *{color:var(--ink)}
+.node.human,.node.human *{color:#1A0A02}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="back" href="index.html"><span class="ar">←</span> Avneet Hundel</a>
+  <b>GTM Launch Framework</b>
+  <span class="badge">Framework</span>
+</header>
+
+<section class="hero">
+  <span class="k">A step by step framework for a product launch plan</span>
+  <h1>How to build a launch plan that the whole company can tell</h1>
+  <p>Most launch decks list features. This framework starts with pre work, then the gap between what the product team sees and what the market feels, and builds every message, asset and metric from there. Each section explains what it does, how to write each part, and the AI prompts that get you there faster.</p>
+  <p style="font-size:15px">It's designed around a single feature launch. If you're launching several features, section 3 shows how to turn them into one story. Worked examples come from the AI Signals launch plan I wrote at Firmable in June 2026.</p>
+  <div class="toc-chips"><span>Pre work, 9 sections, after launch</span><span>2 week internal rollout</span><span>40+ AI prompts</span><span>Built for one feature or many</span></div>
+</section>
+
+<div class="shell">
+  <nav class="nav" id="nav" aria-label="Steps">
+    <a href="#start"><span>00</span>Pre work</a>
+    <a href="#s1"><span>01</span>Name the launch</a>
+    <a href="#s2"><span>02</span>The gap</a>
+    <a href="#s3"><span>03</span>The solution</a>
+    <a href="#s4"><span>04</span>Message house</a>
+    <a href="#s5"><span>05</span>Arm the team</a>
+    <a href="#s6"><span>06</span>Training and rollout</a>
+    <a href="#s7"><span>07</span>External channels</a>
+    <a href="#s8"><span>08</span>Webinars and partners</a>
+    <a href="#s9"><span>09</span>Measure success</a>
+    <a href="#after"><span>10</span>After launch</a>
+  </nav>
+
+  <main class="steps">
+
+  <!-- 00 -->
+  <section class="step" id="start">
+    <div class="step-head"><span class="num">Pre work · before the deck</span><h2>Do the pre work first</h2>
+      <p class="does">Most launches go wrong before anyone writes a message. The pre work decides how big the launch is, who it's for and what customers actually say. Skip it and the deck ends up describing features in the product team's words.</p></div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Set the goal and the launch tier</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>Not every release deserves the same effort. Sizing the launch first stops you over investing in small updates or under investing in big ones.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Agree one business goal with product and leadership. Then pick a tier. <b>Tier 1</b> is a major launch with the full internal and external rollout. <b>Tier 2</b> is enablement plus core channels. <b>Tier 3</b> is release notes, in product messaging and a CS update.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">One goal sentence, a tier, and which sections of this framework you'll use.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Define who it's for</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>A launch aimed at everyone lands with no one. New prospects and existing customers need different messages.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Name the primary buyer and the main user. Split the audience into prospects, existing customers on the right plan, and customers who'd need to upgrade. Rank which matters most for the goal.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">A short audience list with a priority order and the persona you'll write for.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">3</span><div class="pb"><h4>Listen to customers</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>The pains in section 2 must come from the market, not the roadmap. Customer words make every later message sharper.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Review call recordings and transcripts, run a working session with CS and two or three AEs, read win and loss notes, and if you can, interview three to five customers. Capture exact phrases, not summaries.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">A list of top frustrations in customers' own words, ranked by how often they come up.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">4</span><div class="pb"><h4>Scan the competition</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>Buyers will compare you whether you mention competitors or not. You need to know what they claim before you write your difference.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>List the three to five alternatives buyers use today, including spreadsheets or doing nothing. For each, note what they claim, where they're genuinely strong and where buyers complain.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">A one page competitive snapshot that feeds the message house and the battlecard.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">5</span><div class="pb"><h4>Confirm pricing and packaging</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>Sales will be asked what it costs on day one. If the answer isn't settled, the launch stalls in the first call.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Decide whether the feature is included in existing plans, sold as an add on, or part of a new tier. Agree how sales should talk about it and which upgrade path you want to drive.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">One line on packaging and one on how sales positions it. At Firmable, the features were included in existing plans, which made the launch an upgrade moment.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">6</span><div class="pb"><h4>Line up customer proof</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>A launch with a customer quote is far more believable than one without. Proof takes weeks to secure, so start early.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Find two or three beta or early customers. Ask for a quote, a before and after number, or permission for a short case study.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">At least one named or anonymised customer story ready for launch day.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">7</span><div class="pb"><h4>Check readiness and owners</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>Messaging can't fix a product that isn't ready. Clear owners stop tasks falling between teams.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Confirm the launch date with product, the release type (beta or general availability) and known limitations. Make sure help docs and support are ready. Give every workstream one owner.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">A readiness checklist and an owner list covering product, marketing, sales, CS and support.</p></div>
+        </div></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts for pre work</span>
+      <div class="prompt"><span class="pt">Set the context (start every session with this)</span><p>You're helping me plan a product launch. Here's the context.
+Product and feature: [what's launching]
+Who buys it: [role, company size, industry]
+Market: [region]
+What buyers use today instead: [alternatives]
+Call notes and customer quotes: [paste]
+Before you write anything, ask me up to five questions about what's missing.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Pick the launch tier</span><p>Here's what we're releasing and our business goal [paste]. Recommend a launch tier (1 major, 2 meaningful, 3 minor), explain why in three sentences, and list which activities each tier should include.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Define the audience</span><p>Based on this product and customer list, split our audience into prospects, existing customers on eligible plans and customers who would need to upgrade. For each, say what they care about most and which persona to write for first.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Find customer language</span><p>From these transcripts and notes, list the ten frustrations customers mention most about [problem area]. Quote their exact words and count how often each one comes up.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Scan the competition</span><p>For each of these alternatives [list], summarise what they claim, where they're genuinely strong, and the most common complaints from buyers. Present it as a table, then tell me where the gap is that we can own.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Position the packaging</span><p>[Feature] will be [included in plans / an add on / a new tier]. Write a two sentence explanation sales can use when a prospect asks what it costs, and suggest the upgrade path we should push.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Ask for customer proof</span><p>Write a short, friendly email asking a beta customer for a quote or a before and after metric about [feature]. Make it easy to say yes, with two example quotes they can edit.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Build the readiness checklist</span><p>Create a launch readiness checklist for [feature] covering product, docs, support, sales, CS and marketing, with one owner and a due date per item.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+    <div class="card check"><span class="k">Check before starting the deck</span>
+      <label><input type="checkbox"> There's one business goal and an agreed launch tier.</label>
+      <label><input type="checkbox"> You know who the launch is for, in priority order.</label>
+      <label><input type="checkbox"> You have real customer quotes, not assumptions.</label>
+      <label><input type="checkbox"> Pricing and packaging are settled.</label>
+      <label><input type="checkbox"> Product, support and every workstream owner have confirmed they're ready.</label>
+    </div>
+  </section>
+
+  <!-- 01 -->
+  <section class="step" id="s1">
+    <div class="step-head"><span class="num">Section 01</span><h2>Name the launch</h2>
+      <p class="does">Names the launch and sets the scope. Keep it simple. The real story starts in the next section.</p></div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Launch name and scope</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Tells the room what's launching and that the plan covers both the internal and external rollout.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Feature name]</i> Internal and External Launch Plan · <i>[Month Year]</i></p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>AI Signals. Internal and External Launch Plan, June 2026</p></div>
+        </div></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Name the launch</span><p>Suggest five customer facing names for [feature]. Each should describe the outcome for [buyer], not the technology, and be four words or fewer.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="step" id="s2">
+    <div class="step-head"><span class="num">Section 02</span><h2>The gap</h2>
+      <p class="does">This is the most important section of the deck. It shows the divergence between what the product does and what the market actually feels, and reframes the launch as solving a problem the market already has.</p></div>
+    <div class="mock" aria-label="The gap, Firmable example">
+      <span class="tag">Firmable example</span>
+      <h3>Signals was built to turn buying triggers into pipeline. But spotting the signal is only half the story.</h3>
+      <p class="band">The product team sees adoption, coverage, and workflow gaps. The market feels something different; missed pipeline, invisible opportunities, and signals that never translate to action. This bridges that gap. Because we are not launching features. We are solving a problem the market already has.</p>
+      <div class="pains">
+        <div class="pain"><b>Manual agent set up</b><p>Sales teams are leaving pipeline on the table because the tools that should surface buying signals are too complex to actually use.</p></div>
+        <div class="pain"><b>Invisible opportunities</b><p>Most sales teams are only prospecting within accounts they already know. The best opportunity is often the company they haven't found yet.</p></div>
+        <div class="pain"><b>Delay to action</b><p>Knowing when to reach out is only half the battle. If acting on that signal requires switching tools and manual work, most reps simply won't.</p></div>
+      </div>
+      <div class="result"><span>The Result</span>Pipeline lost to complexity. Opportunities never found. Buying moments that passed before anyone acted. These are not product problems. They are revenue problems. And they compound each other every day.</div>
+    </div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>The headline highlights the gap</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>States what the product was built to do, then admits what's still missing. That tension is the reason the launch exists.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Product]</i> was built to <i>[intended outcome]</i>. But <i>[the part still broken]</i> is only half the story.</p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>Signals was built to turn buying triggers into pipeline. But spotting the signal is only half the story.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>The sub line shows the divergence</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Puts the product team's view next to the market's view. Product talks in metrics. The market talks in losses. Then it reframes the launch as solving a problem, not shipping features.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula">The product team sees <i>[internal metrics or gaps]</i>. The market feels something different; <i>[pain 1]</i>, <i>[pain 2]</i>, and <i>[pain 3]</i>. We are not launching features. We are solving a problem the market already has.</p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>The product team sees adoption, coverage, and workflow gaps. The market feels something different; missed pipeline, invisible opportunities, and signals that never translate to action.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">3</span><div class="pb"><h4>Key market pain points</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Names the current market pain in two or three words, then explains it in one sentence. Three pains is ideal. One or two is fine for a small launch.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula"><b>Label</b> · 2 or 3 words a buyer would say<br><b>Sentence</b> · <i>[Who]</i> are <i>[losing what]</i> because <i>[the cause]</i>.</p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small><b>Manual agent set up.</b> Sales teams are leaving pipeline on the table because the tools that should surface buying signals are too complex to actually use.</p></div>
+        </div>
+        <ul class="tips"><li>If the label describes a feature, rewrite it. It should describe a problem.</li><li>Use words you've heard on customer calls. Buyers never say "workflow gaps."</li><li>Every sentence should name a loss, like pipeline, time or revenue.</li></ul></div></div>
+      <div class="part"><span class="pn">4</span><div class="pb"><h4>The result</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Turns the pains into business language. This is what gets leadership to care. These aren't product problems, they're revenue problems.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Pain 1 as a loss]</i>. <i>[Pain 2 as a loss]</i>. <i>[Pain 3 as a loss]</i>. These are not product problems. They are revenue problems. And they compound each other every day.</p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>Pipeline lost to complexity. Opportunities never found. Buying moments that passed before anyone acted.</p></div>
+        </div></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Find the pain in customer language</span><p>From these call notes, list the ten frustrations buyers mention most about [problem area]. Quote their exact words and count how often each comes up.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Name the pains</span><p>Group these frustrations into three market pains. Name each in two or three words a buyer would actually say. Then explain each in one sentence that says who is affected, what they lose and why.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the gap</span><p>Write one sentence on what our product team measures today (adoption, usage, gaps) and one on what the market actually feels. Make the contrast sharp. End with a line that reframes this launch as solving a problem the market already has.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the title</span><p>Write five versions of a headline in this format. "[Product] was built to [intended outcome]. But [what's still missing] is only half the story." Keep each under 20 words.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the result</span><p>Rewrite these three pains as short business losses, one fragment each. Then add two sentences explaining why they're revenue problems, not product problems.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+    <div class="card check"><span class="k">Check before moving on</span>
+      <label><input type="checkbox"> Could a buyer say each pain label out loud on a call?</label>
+      <label><input type="checkbox"> Does every pain sentence name a loss?</label>
+      <label><input type="checkbox"> Does the result talk about revenue, not features?</label>
+      <label><input type="checkbox"> Is there no feature name anywhere in this section except the headline?</label>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="step" id="s3">
+    <div class="step-head"><span class="num">Section 03</span><h2>The solution</h2>
+      <p class="does">Now, and only now, introduce the product. Each pain from section 2 gets matched to how the product solves it, with the benefit written as an outcome.</p></div>
+    <div class="mock" aria-label="The solution, Firmable example">
+      <span class="tag">Firmable example</span>
+      <h3>Three features. One engine. Built to find, watch, and act cohesively.</h3>
+      <p class="engine">AI Signals finds the right companies, at the right moment, and routes action directly to the rep</p>
+      <div class="three">
+        <div class="feat"><span class="fk">Feature 1 · Signal Templates</span><b>More pipeline from net new accounts</b><p class="muted2">A gallery of preconfigured sales templates. Pick a trigger that matches your motion, activate it, and signals start working immediately. No configuration needed.</p></div>
+        <div class="feat"><span class="fk">Feature 2 · Market Signals</span><b>Make the invisible visible</b><p class="muted2">Watch the whole market, not just your list. Agents scan every company in the database, surfacing net new prospects the moment they show a buying trigger.</p></div>
+        <div class="feat"><span class="fk">Feature 3 · Signal Agent Actions</span><b>Faster rep response to buying triggers</b><p class="muted2">Buying triggers push directly to your CRM. No copying and pasting, or remembering to check signals. Be notified instantly.</p></div>
+      </div>
+    </div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Map every pain to a solution</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Proves the product answers the exact problems in section 2. If a pain has no matching solution, drop the pain or flag the gap.</p></div>
+          <div class="cell"><span class="lab">For a one feature launch</span><p>Use one feature and break it into three capabilities, each mapped to one pain.</p></div>
+          <div class="cell"><span class="lab">Example mapping</span><p class="ex"><small>Firmable</small>Manual set up <span class="ar">→</span> Signal Templates<br>Invisible opportunities <span class="ar">→</span> Market Signals<br>Delay to action <span class="ar">→</span> Agent Actions</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Benefit headline, then description</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Leads with what changes for the buyer. The feature name is the label, not the headline.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula"><b>Headline</b> · the outcome in 6 words or fewer<br><b>Description</b> · what it does, then what the user no longer has to do.</p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small><b>Faster rep response to buying triggers.</b> Buying triggers push directly to your CRM. No copying and pasting, or remembering to check signals.</p></div>
+        </div></div></div>
+    </div>
+    <div class="callout"><h4>Launching more than one feature? Make it one engine.</h4>
+      <p>Three separate feature drops sound like three small updates. One engine sounds like a product transformation. Give the features one shared headline, one line that says what they do together, and make each feature solve one pain. The Firmable plan put it this way. "This is not three separate feature drops; it is one product transformation that closes every gap that was holding Signals back."</p>
+      <p class="formula" style="background:var(--surface)"><i>[Number]</i> features. One engine. Built to <i>[verb]</i>, <i>[verb]</i>, and <i>[verb]</i>.</p>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Map pains to features</span><p>Here are our three market pains and the product capabilities we're launching. Match each pain to the capability that solves it and explain how in one sentence. Flag any pain we don't actually solve.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write benefit headlines</span><p>For each capability, write three benefit headlines of six words or fewer that describe the outcome for [buyer], not the feature.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Make it one engine</span><p>We're launching [number] features. Write a headline in the format "[Number] features. One engine. Built to [verb], [verb], and [verb]." Then write one sentence describing what the features do together.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+    <div class="card check"><span class="k">Check before moving on</span>
+      <label><input type="checkbox"> Does every pain in section 2 have a matching solution here?</label>
+      <label><input type="checkbox"> Are the headlines outcomes, not feature names?</label>
+      <label><input type="checkbox"> If there are several features, do they read as one story?</label>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="step" id="s4">
+    <div class="step-head"><span class="num">Section 04</span><h2>The message house</h2>
+      <p class="does">Aligns every team on what you're selling and why. Without it, sales pitches one way, marketing another and CS a third. The message house gives everyone the same language, from the problem to the outcome.</p></div>
+    <div class="mock" aria-label="Message house example">
+      <span class="tag">Firmable example</span>
+      <h3>The message house. How we align everyone on what we're selling and why.</h3>
+      <div class="mh">
+        <div class="l">The Conflict</div><div class="r"><div class="c">Reps are missing pipeline because buying signals get lost between tools</div></div>
+        <div class="l">The Answer</div><div class="r"><div class="c">AI signals now finds the right companies, spots the right moment, and routes the task directly to the rep</div></div>
+        <div class="l">The Components</div><div class="r c3"><div class="c">AI signal templates</div><div class="c">AI market signals</div><div class="c">AI signal agent actions (CRM integration)</div></div>
+        <div class="l">Organizational Outcomes</div><div class="r"><div class="c bold">More pipeline. Less manual work. Faster time to action.</div><div class="r c3"><div class="c">More pipeline from net new accounts</div><div class="c">Make the invisible visible</div><div class="c">Faster rep response to buying triggers</div></div></div>
+        <div class="l hot">The Difference</div><div class="r"><div class="c hot">Global tools give you signals. Firmable gives you the right signals, on the only database built for Australia, with workflows your team can actually own.</div></div>
+        <div class="l">Delivered Responsibly</div><div class="r c3"><div class="c">AI and data that is accurate</div><div class="c">AI and data that's secure and compliant</div><div class="c">AI and data built for ANZ</div></div>
+      </div>
+    </div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>The conflict</h4><div class="row3">
+        <div class="cell"><span class="lab">What it does</span><p>The three pains from section 2, compressed into one sentence a buyer would agree with.</p></div>
+        <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Who]</i> are <i>[losing what]</i> because <i>[root cause]</i>.</p></div>
+        <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>Reps are missing pipeline because buying signals get lost between tools.</p></div></div></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>The answer</h4><div class="row3">
+        <div class="cell"><span class="lab">What it does</span><p>How the product resolves the conflict, in one sentence. Use one verb for each component.</p></div>
+        <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Product]</i> now <i>[verb 1]</i>, <i>[verb 2]</i>, and <i>[verb 3]</i>.</p></div>
+        <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>AI signals now finds the right companies, spots the right moment, and routes the task directly to the rep.</p></div></div></div></div>
+      <div class="part"><span class="pn">3</span><div class="pb"><h4>The components</h4><div class="row3">
+        <div class="cell"><span class="lab">What it does</span><p>The pillars that hold the answer up. Your features, or your capabilities for a one feature launch.</p></div>
+        <div class="cell"><span class="lab">Formula</span><p class="formula">One box per feature or capability, named the way customers will see it in the product.</p></div>
+        <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>AI signal templates · AI market signals · AI signal agent actions</p></div></div></div></div>
+      <div class="part"><span class="pn">4</span><div class="pb"><h4>Organizational outcomes</h4><div class="row3">
+        <div class="cell"><span class="lab">What it does</span><p>What the buyer's business gets. One headline of three short sentences, then one outcome under each component.</p></div>
+        <div class="cell"><span class="lab">Formula</span><p class="formula">More <i>[good thing]</i>. Less <i>[bad thing]</i>. Faster <i>[result]</i>.</p></div>
+        <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>More pipeline. Less manual work. Faster time to action.</p></div></div></div></div>
+      <div class="part"><span class="pn">5</span><div class="pb"><h4>The difference</h4><div class="row3">
+        <div class="cell"><span class="lab">What it does</span><p>Why you and not the alternative. Acknowledge what alternatives offer, then say what only you give.</p></div>
+        <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Alternatives]</i> give you <i>[X]</i>. <i>[Company]</i> gives you <i>[the better X]</i>, <i>[proof]</i>.</p></div>
+        <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>Global tools give you signals. Firmable gives you the right signals, on the only database built for Australia.</p></div></div></div></div>
+      <div class="part"><span class="pn">6</span><div class="pb"><h4>Delivered responsibly</h4><div class="row3">
+        <div class="cell"><span class="lab">What it does</span><p>The trust proof points buyers ask about before they buy, especially for AI. Accuracy, security and fit for their market.</p></div>
+        <div class="cell"><span class="lab">Formula</span><p class="formula">Three proof points buyers will check, like accuracy, security, compliance or local fit.</p></div>
+        <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>Accurate · secure and compliant · built for ANZ</p></div></div></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Write the conflict</span><p>Compress these three market pains into one sentence that [buyer] would agree with on a call. Format it as "[Who] are [losing what] because [root cause]." Give me five options.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the answer</span><p>Write one sentence that starts with "[Product] now" and uses three verbs, one for each of these components. Keep it under 25 words.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the outcomes</span><p>Write an outcomes headline in the format "More [x]. Less [y]. Faster [z]." Then write one short outcome statement for each component.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the difference</span><p>Our alternatives are [list]. Write our difference as two short sentences. The first says what alternatives give buyers. The second says what we give that they can't, with one proof point.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Find the trust proof points</span><p>List the five concerns [buyer] in [industry] raise most before buying an AI product. Then pick the three we can prove and write each as a short proof point.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Pressure test it</span><p>Here's our message house. Act as a skeptical [buyer]. Tell me which line you don't believe, which is too vague, and which sounds like every other vendor.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+    <div class="card check"><span class="k">Check before moving on</span>
+      <label><input type="checkbox"> Can sales, marketing and CS each repeat the conflict and the answer from memory?</label>
+      <label><input type="checkbox"> Does the answer have one verb per component?</label>
+      <label><input type="checkbox"> Would a competitor be unable to copy your difference line word for word?</label>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="step" id="s5">
+    <div class="step-head"><span class="num">Section 05</span><h2>Arm the team before anything goes external</h2>
+      <p class="does">A launch without internal alignment is just an announcement. This section makes sure every rep tells the same story, handles objections confidently and has the assets they need before the first external message goes out.</p></div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Build the collateral, pre work first</h4>
+        <ul class="tips">
+          <li><b>Pre work. A CS and sales working session.</b> Run a session with CS and two or three AEs to gather real objections and customer language before building anything.</li>
+          <li><b>Message house.</b> One page. The conflict, the answer, the pillars, the outcome and the difference.</li>
+          <li><b>Battlecard.</b> How the product compares with alternatives and what to say when a prospect names a competitor. One page reps will actually use.</li>
+          <li><b>Seller placemat and demo talk track.</b> A cheat sheet for before and during calls, plus a demo that tells every feature as one story.</li>
+          <li><b>One home for everything.</b> Centralise every asset where reps already work, like Notion or Confluence.</li>
+        </ul></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Run a GTM enablement call</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Who joins</span><p>SDRs, AEs, sales leadership, CS leads and marketing.</p></div>
+          <div class="cell"><span class="lab">What to cover</span><p>The narrative, why customers should care with each feature framed as a problem solved, the top objections, and where every asset lives.</p></div>
+          <div class="cell"><span class="lab">The test</span><p>Every rep leaves the call able to tell the same story.</p></div>
+        </div>
+        <p class="ex"><small>Firmable objection examples</small>"We already have signals, we don't use it." These features removed the exact reasons you weren't using it.<br>"Will this create CRM noise?" Reps control which signals trigger actions and configure agents to match their workflow.</p></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Mine the working session</span><p>Here are notes from our working session with CS and sales. Pull out every objection and the exact customer language behind it. Group them by theme and rank by how often they came up.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Build a battlecard</span><p>Write a one page battlecard for [product] against [competitor]. Include when they come up, where they're genuinely strong, where we win, one trap question to ask, and one thing reps should never say.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the demo talk track</span><p>Write a five minute demo talk track that opens with the conflict from our message house, shows each feature as the answer to one pain, and ends with the outcome. Tell it as one story, not a feature tour.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Handle objections</span><p>Write a response to each of these objections in under 25 words. Acknowledge the concern first, then reframe it using our message house.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="step" id="s6">
+    <div class="step-head"><span class="num">Section 06</span><h2>Training, readiness and the two week rollout</h2>
+      <p class="does">Every rep practises the story before the market hears it, and nothing goes external until every box is checked.</p></div>
+    <div class="mock" aria-label="Two week rollout">
+      <span class="tag">The rollout</span>
+      <h3>Two week internal rollout</h3>
+      <div class="timeline">
+        <div><b>Day 1 to 2</b>Collateral built and live in one home</div>
+        <div><b>Day 3 to 5</b>Working session with CS and AEs</div>
+        <div><b>Day 5</b>GTM enablement call</div>
+        <div><b>Day 6 to 9</b>Sales training complete, FAQ updated</div>
+        <div><b>Day 10 to 14</b>Go or no go. External launch begins</div>
+      </div>
+      <p class="muted2" style="font-size:13px">After launch · a debrief to assess performance and find improvements</p>
+    </div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Sales training</h4>
+        <ul class="tips"><li><b>One story, every rep.</b> Every SDR and AE practises the talk track before external launch. Call blitzes and AE sessions work well for this.</li><li><b>Partner with sales</b> on a short training module explaining the new capability and its value for customers.</li><li><b>Update the internal FAQ</b> with new capabilities, key messages and the questions customers will ask.</li></ul></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Launch readiness check</h4>
+        <ul class="tips"><li><b>All collateral QA checked</b> so every asset tells the same story.</li><li><b>The asset hub is live</b> and reps can find what they need without chasing the PMM.</li><li><b>Go or no go.</b> If collateral isn't signed off or training is incomplete by day 9, the external launch moves by a few days. Internal readiness comes first.</li></ul></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Write the internal FAQ</span><p>Write an internal FAQ for [feature] with the ten questions reps and CS will be asked most. Keep each answer under 40 words and consistent with this message house.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Build the rollout checklist</span><p>Turn this launch plan into a two week rollout checklist with an owner and due day for every task, plus clear go or no go criteria for day 9.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Role play the call</span><p>Act as a [buyer] on a discovery call. I'm the rep pitching [feature]. Raise realistic objections one at a time and score my answers against our message house.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="step" id="s7">
+    <div class="step-head"><span class="num">Section 07</span><h2>External launch. One moment, not separate announcements.</h2>
+      <p class="does">Every channel is anchored to one narrative, written as one line every asset ladders back to.</p></div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Digital and content</h4>
+        <ul class="tips"><li><b>LinkedIn launch post.</b> Problem led, not feature led. Open with the pain, then show how the product solves it end to end.</li><li><b>Demo video.</b> A short "why we built this" walkthrough that shows rather than tells.</li><li><b>Blog post and website.</b> Written from the pain angle, with the website updated to match.</li><li><b>Email to existing customers.</b> Personal to what changed for them, not a generic product update.</li><li><b>In product notification.</b> Surface the feature at the moment users are most likely to try it.</li></ul></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Demand gen</h4>
+        <ul class="tips"><li><b>Outbound sequences.</b> Give stalled prospects a timely reason to re engage.</li><li><b>Paid social.</b> Boost the launch post or run a short campaign aimed at your buyers.</li></ul></div></div>
+      <div class="part"><span class="pn">3</span><div class="pb"><h4>One narrative across all channels</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">What it does</span><p>Keeps every subject line, post and ad telling the same story.</p></div>
+          <div class="cell"><span class="lab">Formula</span><p class="formula"><i>[Verb]</i> the <i>[thing]</i>, <i>[verb]</i> the <i>[moment]</i>, <i>[verb]</i> <i>[how]</i>.</p></div>
+          <div class="cell"><span class="lab">Example</span><p class="ex"><small>Firmable</small>Find the right companies, spot the right moment, act automatically.</p></div>
+        </div></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Write the narrative line</span><p>Using this message house, write five one line narratives that every launch asset can ladder back to. Use three short verb phrases.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the launch post</span><p>Write a LinkedIn launch post for [feature]. Open with the pain in the buyer's words, not the feature. Show how it's solved end to end in three short lines, then end with one clear next step. Under 180 words.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the customer email</span><p>Write an email to existing [plan] customers explaining what changed and why it matters for their workflow. Make it specific to how they use the product today. Under 150 words.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Write the outbound sequence</span><p>Write a three touch outbound sequence that uses this launch as a reason to re engage prospects who went quiet. Each email under 80 words, problem first.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="step" id="s8">
+    <div class="step-head"><span class="num">Section 08</span><h2>Webinars, partnerships and events</h2>
+      <p class="does">Webinars and events put the product in front of the right people at the right time. Partnerships multiply reach through channels you don't own.</p></div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Webinars, one per audience</h4>
+        <ul class="tips"><li><b>Product spotlight for prospects.</b> A live end to end demo positioned as a first look.</li><li><b>Customer webinar.</b> What changed, why it matters and how to get more from it. Drives adoption and reduces churn risk.</li></ul></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Partnerships</h4>
+        <ul class="tips"><li><b>Amplify through partner channels</b> and communities where your buyers already are.</li><li><b>Lead with the most relevant feature.</b> At Firmable, the CRM integration was the strongest story for HubSpot and Salesforce audiences.</li><li><b>Brief partners</b> with key messages and assets so they tell the same story.</li></ul></div></div>
+      <div class="part"><span class="pn">3</span><div class="pb"><h4>An event, if the product is demonstrable</h4>
+        <p>A small invite only demo for customers and warm prospects. It's usually more realistic in week 3 or 4 than on launch day, and doubles as an expansion opportunity for CS.</p></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Plan the webinar</span><p>Outline a 30 minute product spotlight webinar for [buyer]. Open with the problem, demo the workflow end to end, include one customer story and end with a clear next step.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Pick the partners</span><p>We sell [product] to [buyer] in [market]. List the ten partner channels, communities and newsletters where these buyers already spend time, and which feature to lead with for each.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section class="step" id="s9">
+    <div class="step-head"><span class="num">Section 09</span><h2>How we measure success, tactical to strategic</h2>
+      <p class="does">Tactical metrics tell you if the launch executed well. Operational tells you if the product is being used. Strategic tells you if it drove revenue. Tracking all three shows exactly where the launch is working, so you can course correct fast.</p></div>
+    <div class="mock" aria-label="Metrics example">
+      <span class="tag">Firmable example</span>
+      <h3>How we measure success. Tactical to strategic.</h3>
+      <div class="metrics">
+        <div><span class="muted2">Tactical · did the launch land?</span><b>80%</b><span>collateral usage in week 1</span><span class="muted2">Owner · Marketing</span></div>
+        <div><span class="muted2">Operational · is it being adopted?</span><b>40%</b><span>feature activation in 30 days</span><span class="muted2">Owner · Product and CS</span></div>
+        <div><span class="muted2">Strategic · did it drive revenue?</span><b>15 to 20</b><span>plan upgrades in 60 days</span><span class="muted2">Owner · Marketing, Sales and CS</span></div>
+      </div>
+    </div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Three tiers, one owner each</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Tactical</span><p>Did the launch land? Collateral usage, training completion, launch post reach.</p></div>
+          <div class="cell"><span class="lab">Operational</span><p>Is it being adopted? Feature activation, usage by segment, time to first value.</p></div>
+          <div class="cell"><span class="lab">Strategic</span><p>Did it drive revenue? Upgrades, expansion, new pipeline, win rate.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>The ROI signal to watch</h4>
+        <p>Name the one commercial signal sales should track for 60 days. At Firmable, all three features were included in existing plans, so the launch didn't create a new paid tier. It raised the value of the one that already existed. The signals to watch were plan upgrades from lower tiers and activation inside existing accounts, because those cohorts showed intent for expansion conversations.</p></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Set the metrics</span><p>Suggest one tactical, one operational and one strategic metric for launching [feature]. Give each a realistic target based on these baselines [paste], a time frame and one owning team.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Find the commercial angle</span><p>[Feature] is included in [plans]. Explain how this launch could still drive revenue, and which two signals sales should track in the 60 days after launch.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+    <div class="card check"><span class="k">Final check before you present</span>
+      <label><input type="checkbox"> Every pain in section 2 is solved in section 3 and appears in the message house.</label>
+      <label><input type="checkbox"> Every rep can tell the story in one breath.</label>
+      <label><input type="checkbox"> Every channel ladders back to the same narrative line.</label>
+      <label><input type="checkbox"> Every metric has a target, a time frame and an owner.</label>
+      <label><input type="checkbox"> End with Q&amp;A. The best launch plans get challenged before the market does.</label>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="step" id="after">
+    <div class="step-head"><span class="num">After launch</span><h2>Listen, learn and update</h2>
+      <p class="does">Launch day is the start, not the finish. The first 30 to 60 days tell you whether the message is landing, and the best teams update it fast.</p></div>
+    <div class="anat">
+      <div class="part"><span class="pn">1</span><div class="pb"><h4>Check the message is landing</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>What you wrote and what reps say on calls drift apart within weeks.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>After 30 days, listen to launch related calls. Are buyers repeating your conflict line back? Are reps using the talk track or reverting to features?</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">A short list of lines to keep, cut or rewrite.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">2</span><div class="pb"><h4>Close the feedback loop</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>Sales and CS hear objections you never planned for.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Collect new objections, win and loss reasons on launch influenced deals, and feature requests. Update the message house, battlecard and FAQ.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">Updated assets, shared with the team with a note on what changed.</p></div>
+        </div></div></div>
+      <div class="part"><span class="pn">3</span><div class="pb"><h4>Run the debrief</h4>
+        <div class="row3">
+          <div class="cell"><span class="lab">Why it matters</span><p>Each launch should make the next one easier.</p></div>
+          <div class="cell"><span class="lab">How to do it</span><p>Compare results against every metric, note what worked and what didn't, and agree three changes for next time. Share results with the whole company.</p></div>
+          <div class="cell"><span class="lab">Output</span><p class="ex">A one page debrief and a company update celebrating early wins.</p></div>
+        </div></div></div>
+    </div>
+    <div class="prompts"><span class="k">AI prompts</span>
+      <div class="prompt"><span class="pt">Is the message landing?</span><p>Here are transcripts from calls since launch [paste]. Which lines from our message house are buyers repeating back, which are they ignoring, and what new objections are coming up? Suggest three edits to the message house.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Plan the debrief</span><p>Write a one page post launch debrief that compares results against each metric, lists what worked and what didn't, and ends with three changes for the next launch.</p><button class="copy" type="button">Copy</button></div>
+      <div class="prompt"><span class="pt">Share the wins</span><p>Write a short internal update celebrating the launch results so far. Name the teams involved, lead with one customer story, and end with what's next.</p><button class="copy" type="button">Copy</button></div>
+    </div>
+  </section>
+
+  </main>
+</div>
+<footer class="foot">A framework by Avneet Hundel. Examples are from the AI Signals launch plan she wrote at Firmable in June 2026, shared as a personal work sample. Not an official Firmable page.</footer>
+
+<script>
+(function(){
+  // copy prompts
+  function toast(t){const el=document.createElement("div");el.className="toast";el.textContent=t;document.body.appendChild(el);setTimeout(()=>el.remove(),1600);}
+  document.querySelectorAll(".prompt .copy").forEach(b=>b.addEventListener("click",()=>{
+    const p=b.parentElement.querySelector("p");const txt=p.textContent;
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(p);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Selected. Press copy on your keyboard");};
+    try{navigator.clipboard.writeText(txt).then(()=>{b.textContent="Copied";toast("Prompt copied");setTimeout(()=>b.textContent="Copy",1500);},sel);}catch(e){sel();}
+  }));
+  // checklist memory
+  const boxes=[...document.querySelectorAll(".check input")];
+  let saved=[];try{saved=JSON.parse(localStorage.getItem("lk.checks")||"[]");}catch(e){}
+  boxes.forEach((c,i)=>{c.id="chk"+i;c.checked=!!saved[i];c.addEventListener("change",()=>{try{localStorage.setItem("lk.checks",JSON.stringify(boxes.map(x=>x.checked)));}catch(e){}});});
+  // nav highlight
+  const links=[...document.querySelectorAll("#nav a")];
+  const secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+  function onScroll(){let cur=0;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)cur=i;});links.forEach((a,i)=>a.classList.toggle("on",i===cur));}
+  addEventListener("scroll",onScroll,{passive:true});onScroll();
+})();
+</script>
+</body>
+</html>

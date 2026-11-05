@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Call Intelligence Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap">
+<style>
+/* Layout: an internal tool. Sidebar of eight pages on the left, the active page on the right. Tabs scroll horizontally on phones. */
+:root{
+  --bg:#0C0C0C; --surface:#151312; --ink:#EFE4DA; --muted:#A89C93; --line:#2B2522;
+  --accent:#F2823A; --accent-soft:#2E1A0F; --on-accent:#FFFFFF; --fill:#E2561F; --bar:#F2823A; --sandy:#FFB27A;
+  --ok:#5FBF84; --warn:#F2A05B;
+  --display:'Kanit', system-ui, sans-serif;
+  --body:'Kanit', system-ui, sans-serif;
+  --mono:'Kanit', system-ui, sans-serif;
+  color-scheme:dark;
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.12;text-wrap:balance}
+h4{font-family:var(--body);font-weight:600;font-size:15px}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+
+.banner{max-width:1280px;margin:12px auto 0;background:var(--sandy);border-radius:10px;padding:10px 14px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.banner b{font-weight:600}
+.banner a{margin-left:auto;font-weight:600;text-decoration:none}
+
+.topbar{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;padding-block:14px;border-bottom:1px solid var(--line)}
+.tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:20px}
+.logo{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--fill);color:var(--on-accent);font-size:18px;font-family:var(--body)}
+.badge{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);white-space:nowrap}
+.tb-back{margin-left:auto;font-size:14px;font-weight:600;text-decoration:none;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:10px;max-width:90ch}
+@media (max-width:480px){.badge{display:none}}
+.shell{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;padding-block:20px 60px}
+@media (max-width:900px){.shell{grid-template-columns:minmax(0,1fr)}}
+.side{position:sticky;top:16px;align-self:start;display:flex;flex-direction:column;gap:18px}
+@media (max-width:900px){.side{position:static}}
+.brand h1{font-size:26px;font-weight:800;letter-spacing:-.01em}
+.brand p{font-size:13px;color:var(--muted);margin-top:4px}
+.tabs{display:flex;flex-direction:column;gap:2px}
+@media (max-width:900px){.tabs{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}}
+.tabs a{display:flex;gap:10px;align-items:baseline;padding:9px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:500;white-space:nowrap}
+.tabs a span{font-family:var(--mono);font-size:11px;opacity:.7}
+.tabs a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.tabs a:hover{color:var(--ink)}
+.side .who{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:900px){.side .who{display:none}}
+
+.page{display:grid;gap:22px;min-width:0}
+.ph{display:grid;gap:8px;max-width:70ch}
+.ph h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em}
+.ph p{color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1000px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+.stat b{display:block;font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:999px;background:var(--accent-soft);color:var(--ink)}
+.pill.up{background:#F3D2C8;color:#6C2A23}
+.pill.down{background:#D9EEDD;color:#1F5A37}
+.pill.flat{background:var(--sandy)}
+.pill.real{background:var(--ink);color:var(--bg)}
+
+/* flow diagram */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:stretch}
+@media (max-width:900px){.flow{grid-template-columns:1fr}}
+.node{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;position:relative;display:grid;gap:4px}
+.node .n{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.node p{font-size:13px;color:var(--muted)}
+.node.human{background:var(--sandy);border-color:transparent}
+.node.out{background:var(--fill);border-color:var(--fill);color:var(--on-accent)}
+.node.out p,.node.out .n{color:var(--on-accent);opacity:.92}
+
+/* bars */
+.bars{display:grid;gap:10px}
+.barrow{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 52px;gap:12px;align-items:center;font-size:14px}
+.track{height:12px;background:var(--accent-soft);border-radius:6px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--bar);border-radius:6px}
+.barrow.top .track i{background:var(--fill)}
+.barrow .v{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.barrow{grid-template-columns:minmax(0,1fr) 44px}.barrow .track{grid-column:1 / -1;order:3}}
+
+.quote{border-left:3px solid var(--fill);padding:4px 0 4px 14px;font-family:var(--display);font-size:18px;line-height:1.35}
+.quote small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
+
+/* objection library */
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tools input{flex:1 1 220px;font:inherit;padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.chip{font:500 13px var(--body);padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obj{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.obj summary{list-style:none;cursor:pointer;padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center}
+.obj summary::-webkit-details-marker{display:none}
+.obj summary h3{font-size:20px;font-weight:700}
+.obj .metaRow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;grid-column:1 / -1}
+.obj .freq{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.obj .freq .track{width:90px;height:8px}
+.obj .tog{font-family:var(--mono);color:var(--muted);font-size:18px}
+.obj[open] .tog{transform:rotate(45deg)}
+.obj .body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:0 18px 18px}
+@media (max-width:760px){.obj .body{grid-template-columns:1fr}}
+.obj .body > div{display:grid;gap:6px;align-content:start}
+.obj .say{background:var(--accent-soft);border-radius:10px;padding:12px}
+.obj .say p{font-family:var(--display);font-size:16px;line-height:1.4}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+
+/* persona */
+.persona{display:grid;gap:12px;align-content:start}
+.persona .top{display:flex;justify-content:space-between;gap:8px;align-items:start}
+.persona h3{font-size:22px;font-weight:700}
+.persona dl{margin:0;display:grid;gap:10px}
+.persona dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.persona dd{margin:2px 0 0;font-size:14px}
+.persona .open{background:var(--accent-soft);border-radius:8px;padding:10px;font-size:14px}
+.persona.mine{border-color:var(--fill);box-shadow:inset 0 0 0 1px var(--fill)}
+
+/* battlecard */
+.seg{display:inline-flex;flex-wrap:wrap;gap:6px}
+.bc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.bc{grid-template-columns:1fr}}
+.bc ul{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.bc .win{background:var(--fill);color:var(--on-accent);border-color:var(--fill)}
+.bc .win .k{color:var(--on-accent);opacity:.9}
+.trap{font-family:var(--display);font-size:18px;line-height:1.35}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.tw{overflow-x:auto}
+
+.email{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.email .hd{padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px;display:grid;gap:2px;background:var(--accent-soft)}
+.email .it{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:4px}
+.email .it:last-child{border-bottom:0}
+.email .it p{font-size:14px}
+.email .it .so{font-weight:600;color:var(--accent)}
+
+.foot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+.ar{font-family:"Segoe UI Symbol","Segoe UI",system-ui,-apple-system,sans-serif;font-weight:400}
+
+/* dark theme to match the main page */
+:root{color-scheme:dark}
+body{font-weight:300;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:700;letter-spacing:-.015em}
+h1{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;background:linear-gradient(180deg,#6E6259 0%,#F3E4D6 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+b,strong{font-weight:600}
+a{color:var(--accent)}
+::selection{background:#F2823A;color:#0C0C0C}
+.banner,.pill.flat,.node.human,.chips span,.mock .pain b,.mh .l.hot,.mh .c.hot,.callout,.mock .pain:nth-child(3) b,.mh .l.hot *,.callout *{color:#1A0A02}
+.mock .pain:nth-child(1) b{color:#fff}
+.prompt{background:#1C1917;color:var(--ink);border:1px solid var(--line)}
+.callout [style*="background"],.callout [style*="background"] *{color:var(--ink)}
+.node.human,.node.human *{color:#1A0A02}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="tb-brand" href="#overview"><span class="logo" aria-hidden="true">◎</span>Call Intelligence</a>
+  <span class="badge">Unofficial work sample</span>
+  <a class="tb-back" href="index.html"><span class="ar">←</span> Portfolio</a>
+</header>
+
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><p style="margin-top:0">What 4,000+ sales calls taught me, turned into guides and AI tools for the sales team</p></div>
+    <nav class="tabs" id="tabs" aria-label="Pages">
+      <a href="#overview"><span>01</span>Overview</a>
+      <a href="#competitors"><span>02</span>Daily competitor digest</a>
+      <a href="#objections"><span>03</span>Objection library</a>
+      <a href="#personas"><span>04</span>ICP and personas</a>
+      <a href="#battlecards"><span>05</span>Battlecards</a>
+      <a href="#industries"><span>06</span>Industry playbook</a>
+      <a href="#build"><span>07</span>How it's built</a>
+    </nav>
+    <div class="who">Built by Avneet Hundel with Claude Code, n8n and HubSpot.</div>
+  </aside>
+
+  <main id="main">
+
+  <!-- 01 OVERVIEW -->
+  <section class="page" data-page="overview">
+    <div class="ph"><span class="k">Overview</span><h2>Every sales call is market research. Most teams throw it away.</h2>
+      <p>I was the one making the calls at Firmable. The same objections, competitor names and buyer language came up again and again, but none of it was captured anywhere. So I built a system that turns call transcripts into objection guides, ICP frameworks and battlecards, and I reviewed every output before reps saw it.</p></div>
+    <div class="grid4">
+      <div class="panel stat"><b>4,379</b><span>Calls logged, mostly outbound cold calls</span> <span class="pill real">Real</span></div>
+      <div class="panel stat"><b>1,219</b><span>Personalised outbound emails sent</span> <span class="pill real">Real</span></div>
+      <div class="panel stat"><b>11</b><span>AI tools and automations built for the sales team</span> <span class="pill real">Real</span></div>
+      <div class="panel stat"><b>45 to 60 hrs</b><span>Research time saved a month by AI notes on every HubSpot prospect, covering ICP fit and how to sell</span> <span class="pill real">Real</span></div>
+    </div>
+    <div class="panel" style="display:grid;gap:14px">
+      <span class="k">How the system works</span>
+      <div class="flow">
+        <div class="node"><span class="n">1 · Capture</span><h4>Call recordings</h4><p>Calls logged in HubSpot with recordings and outcomes</p></div>
+        <div class="node"><span class="n">2 · Transcribe</span><h4>Transcripts at scale</h4><p>Batched and cleaned so every call is searchable text</p></div>
+        <div class="node"><span class="n">3 · Extract</span><h4>AI tagging</h4><p>Claude pulls out objections, persona, competitor and outcome from each call</p></div>
+        <div class="node human"><span class="n">4 · Review</span><h4>Human check</h4><p>I review tags and draft guides before anything reaches reps</p></div>
+        <div class="node out"><span class="n">5 · Ship</span><h4>Rep ready tools</h4><p>Objection guides, ICP frameworks, battlecards and pitch guides in Notion</p></div>
+      </div>
+    </div>
+    <div class="grid3">
+      <a class="panel" href="#objections" style="text-decoration:none;display:grid;gap:6px"><span class="k">Most used</span><h4>Objection library</h4><p class="muted">Ten objections reps hear most, what sits behind each one, and what to say.</p></a>
+      <a class="panel" href="#personas" style="text-decoration:none;display:grid;gap:6px"><span class="k">Strategy</span><h4>ICP and personas</h4><p class="muted">Messaging by buyer, including an underused segment I found on the floor.</p></a>
+      <a class="panel" href="#competitors" style="text-decoration:none;display:grid;gap:6px"><span class="k">Every morning</span><h4>Daily competitor digest</h4><p class="muted">Competitor news with what it means for Firmable and what to say, sent straight to the team's inbox.</p></a>
+    </div>
+  </section>
+
+  <!-- 02 DAILY COMPETITOR DIGEST -->
+  <section class="page" data-page="competitors" hidden>
+    <div class="ph"><span class="k">Daily competitor digest</span><h2>A daily briefing so the growth team never hears news from a prospect first</h2>
+      <p>An n8n workflow I built that runs every morning. It watches five competitors, summarises what changed, turns each story into an action for Firmable, and sends it straight to the team's inbox before the first call block.</p></div>
+    <div class="flow">
+      <div class="node"><span class="n">1 · Watch</span><h4>News feeds</h4><p>Google News RSS for ZoomInfo, Apollo, Lusha, Clay and Cognism</p></div>
+      <div class="node"><span class="n">2 · Filter</span><h4>Remove noise</h4><p>Drop duplicates and stories older than a day</p></div>
+      <div class="node"><span class="n">3 · Summarise</span><h4>GPT-4o mini</h4><p>What happened, why it matters for Firmable, and the action to take</p></div>
+      <div class="node human"><span class="n">4 · Format</span><h4>One email</h4><p>Grouped by competitor, skimmable in a minute</p></div>
+      <div class="node out"><span class="n">5 · Deliver</span><h4>Gmail, every morning</h4><p>To the growth and sales team</p></div>
+    </div>
+    <div class="email" aria-label="Example digest format">
+      <div class="hd"><span><b>Subject</b> · Daily competitor digest · Tue 28 Jul</span><span class="muted">Example format only. Items below are placeholders, not real news.</span></div>
+      <div class="it"><span class="k">Competitor A · Product</span><h4>Launches a new intent data feature for mid market teams</h4><p><span class="so">Why it matters for Firmable.</span> Prospects may ask if we do the same. <span class="so">Action.</span> Arm reps with one line. Signals are only useful if the contact data behind them connects in ANZ.</p></div>
+      <div class="it"><span class="k">Competitor B · Pricing</span><h4>Changes its free plan limits</h4><p><span class="so">Why it matters for Firmable.</span> Price led buyers may revisit. <span class="so">Action.</span> Reopen price led lost deals with a cost per connected conversation comparison.</p></div>
+      <div class="it"><span class="k">Competitor C · Company</span><h4>Announces a new regional office</h4><p><span class="so">Why it matters for Firmable.</span> Expect more local outbound into our accounts. <span class="so">Action.</span> Flag shared target accounts to AEs and lead with ANZ native data and local support.</p></div>
+    </div>
+  </section>
+
+  <!-- 03 OBJECTIONS -->
+  <section class="page" data-page="objections" hidden>
+    <div class="ph"><span class="k">Objection library</span><h2>What buyers say, what they mean, and what to say back</h2>
+      <p>Built from patterns across transcripts and refined over several versions with the team. Frequency shows each objection's share of tagged objections in a typical month (illustrative).</p></div>
+    <div class="tools">
+      <label for="q" class="mono" style="position:absolute;left:-9999px">Search objections</label>
+      <input id="q" type="search" placeholder="Search, for example ZoomInfo or budget">
+      <div class="seg" id="cats" role="group" aria-label="Filter by category"></div>
+    </div>
+    <div id="objList" style="display:grid;gap:12px"></div>
+  </section>
+
+  <!-- 04 PERSONAS -->
+  <section class="page" data-page="personas" hidden>
+    <div class="ph"><span class="k">ICP and personas</span><h2>One product, five buyers, five different reasons to care</h2>
+      <p>Segmented from call outcomes. Each persona has its own pain, trigger and opening line, so reps stop pitching features to people who care about different outcomes.</p></div>
+    <div class="grid3" id="personaGrid"></div>
+  </section>
+
+  <!-- 05 BATTLECARDS -->
+  <section class="page" data-page="battlecards" hidden>
+    <div class="ph"><span class="k">Battlecards</span><h2>When a prospect names a competitor</h2>
+      <p>One page per competitor that reps actually use. Fair about where the competitor is strong, specific about where Firmable wins. This reflects Firmable's positioning as I pitched it in 2026.</p></div>
+    <div class="seg" id="bcTabs" role="group" aria-label="Choose competitor"></div>
+    <div id="bcBody" style="display:grid;gap:16px"></div>
+  </section>
+
+  <!-- 06 INDUSTRIES -->
+  <section class="page" data-page="industries" hidden>
+    <div class="ph"><span class="k">Industry playbook</span><h2>The same product pitched six ways</h2>
+      <p>From the industry pitch guide and the hard to sell segments guide I wrote for SDRs and AEs. Proof points are from accounts I worked, anonymised.</p></div>
+    <div class="panel tw"><table id="indTable"><thead><tr><th>Industry</th><th>Who to call</th><th>The angle</th><th>Opening hook</th><th>Proof from the floor</th></tr></thead><tbody></tbody></table></div>
+    <div class="panel" style="display:grid;gap:8px"><span class="k">Hard to sell segments</span>
+      <p>Some verticals buy slowly no matter how good the pitch is. For these, I moved reps from cold calls to multi threaded account plays. Map three or more stakeholders, lead with a peer reference in the same industry, and use a short personalised Loom for the senior decision maker.</p></div>
+  </section>
+
+  <!-- 08 BUILD -->
+  <section class="page" data-page="build" hidden>
+    <div class="ph"><span class="k">How it's built</span><h2>Process first, then the tool</h2>
+      <p>Every automation here started with a sales process I mapped by hand. The AI only does the parts that were repetitive. A person still decides what reps see.</p></div>
+    <div class="grid3">
+      <div class="panel" style="display:grid;gap:8px;align-content:start"><span class="k">Call transcript pipeline</span><p>Claude Code processes transcripts in batches, tags objections, personas and competitors, then drafts handling guides and persona frameworks for review.</p><p class="muted mono" style="font-size:12px">Claude Code · HubSpot · Notion</p></div>
+      <div class="panel" style="display:grid;gap:8px;align-content:start"><span class="k">HubSpot notes enrichment</span><p>Adds market intelligence and sales context to company records before a rep dials, saving around 2 minutes of research per company.</p><p class="muted mono" style="font-size:12px">Claude Code · HubSpot</p></div>
+      <div class="panel" style="display:grid;gap:8px;align-content:start"><span class="k">Competitor digest</span><p>Daily news monitoring across five competitors with AI summaries emailed to the team.</p><p class="muted mono" style="font-size:12px">n8n · Google News RSS · GPT-4o mini · Gmail</p></div>
+      <div class="panel" style="display:grid;gap:8px;align-content:start"><span class="k">Call outcome tool</span><p>Bulk logs call outcomes so reporting stays clean without reps spending their afternoon in the CRM.</p><p class="muted mono" style="font-size:12px">Claude Code · HubSpot</p></div>
+      <div class="panel" style="display:grid;gap:8px;align-content:start"><span class="k">Claude skills for the team</span><p>Packaged skills that fix ICP sync issues and allocate booked meetings to the right AE.</p><p class="muted mono" style="font-size:12px">Claude · HubSpot</p></div>
+      <div class="panel" style="display:grid;gap:8px;align-content:start"><span class="k">Calendar cross checker</span><p>Syncs HubSpot meetings against Outlook so no booked demo slips through.</p><p class="muted mono" style="font-size:12px">HubSpot · Outlook</p></div>
+    </div>
+    <div class="panel" style="display:grid;gap:10px"><span class="k">Principles</span>
+      <div class="grid3">
+        <div><h4>Map the process by hand first</h4><p class="muted">If I can't draw the workflow on paper, automating it just makes the mess faster.</p></div>
+        <div><h4>Keep a person in the loop</h4><p class="muted">AI drafts. I review. Reps only see guidance that a human has checked against real calls.</p></div>
+        <div><h4>Ship where reps already work</h4><p class="muted">Outputs live in HubSpot, Notion and the inbox. Nobody needs a new tool to use them.</p></div>
+      </div>
+    </div>
+    <p class="foot">Want the full walkthrough of any of these? <a href="index.html#contact">Get in touch</a>.</p>
+  </section>
+
+    <p class="note">A personal work sample by Avneet Hundel, based on her 2026 sales call analysis at Firmable. Some figures and quotes are illustrative and anonymised. Not an official Firmable page.</p>
+  </main>
+</div>
+
+<script>
+(function(){
+const OBJ=[
+ {c:"Competitor",f:18,t:"up",q:"We already use ZoomInfo.",why:"Usually sunk cost and fear of switching, not real satisfaction. Many teams on global tools struggle with ANZ direct dials.",say:"Most teams I speak with keep ZoomInfo for global and add Firmable for ANZ. Out of curiosity, how many of your Australian contacts come back with no working mobile?",proof:"A telco on 18 competitor seats agreed to evaluate Firmable alongside its existing contract."},
+ {c:"Timing",f:14,t:"up",q:"We're locked into a contract.",why:"A real constraint, but it also means the renewal decision is coming. Buyers want proof before then.",say:"That makes sense. Would it help to run Firmable on your ANZ territories now, so when renewal comes round you're deciding on your own numbers?",proof:"Three decision makers at one account agreed to pay for both tools if value was proven."},
+ {c:"Brush off",f:13,t:"flat",q:"Just send me an email.",why:"Polite exit. They don't yet see a reason to give you time.",say:"Happy to. So it's actually useful, what's the one thing your team finds hardest when building lists right now?",proof:"Turning this into a question kept several cold calls going past ten minutes."},
+ {c:"Budget",f:11,t:"flat",q:"There's no budget this financial year.",why:"Often means the value hasn't been tied to a cost they already carry.",say:"Understood. If the hours your reps spend researching already cover the licence, would that be worth 20 minutes to check?",proof:"The ROI calculator was built for exactly this conversation."},
+ {c:"Price",f:9,t:"down",q:"Apollo is cheaper.",why:"They're comparing price per seat, not price per conversation that actually connects.",say:"It is cheaper per seat. The question is cost per connected conversation. If half the numbers don't connect, the cheap seat gets expensive fast.",proof:"Wrong fit and bounced outreach dropped when teams used ANZ verified data."},
+ {c:"Adoption",f:8,t:"down",q:"We already have signals and don't use them.",why:"The old tools were too complex to set up, so nobody acted on them.",say:"That's exactly why we rebuilt them. Templates mean no set up, and signals push straight into your CRM, so nobody has to remember to check.",proof:"From the AI Signals launch enablement."},
+ {c:"Implementation",f:7,t:"flat",q:"Will this create CRM noise?",why:"RevOps is protecting data quality and their own time.",say:"Reps choose which signals trigger actions and set up agents to match their workflow. Nothing lands in the CRM that you haven't switched on.",proof:"From the AI Signals launch enablement."},
+ {c:"Status quo",f:7,t:"flat",q:"LinkedIn Sales Navigator is enough.",why:"Sales Nav tells them who to target. It doesn't tell them how to reach that person.",say:"Sales Nav is great for finding the right person. Firmable gives you their direct dial and verified email, and pushes them into HubSpot in one click.",proof:"Common in SMB and relationship led teams."},
+ {c:"Authority",f:7,t:"flat",q:"I'm not the right person.",why:"Often true. It's a chance to multi thread rather than a dead end.",say:"Thanks for being straight with me. Who owns pipeline targets on your team? Would it be crazy if I mentioned we spoke?",proof:"Multi threading is how one account went from repeated no's to three stakeholders on one call."},
+ {c:"Data quality",f:6,t:"down",q:"We've been burned by bad data before.",why:"Past pain. They need proof on their own accounts, not a claim.",say:"Fair. Send me 50 accounts you care about and test our data against what you have. If it doesn't win, you've lost nothing.",proof:"Free trials on the prospect's own list were the fastest way to build trust."}
+];
+const PERS=[
+ {n:"Head of Sales",tag:"Economic buyer",pain:"Pipeline coverage is thin and reps spend too long researching.",trig:"New funding, SDR hiring, a missed quarter",msg:"More pipeline from accounts you haven't found yet.",open:"\"I saw you're hiring two SDRs. Most sales leaders I speak with want them booking meetings in week two, not building lists. Is that on your radar?\""},
+ {n:"SDR or BDR manager",tag:"Champion",pain:"Slow ramp, low connect rates, inconsistent activity.",trig:"New starters, a new territory, low connect rates",msg:"Reps spend their day talking, not searching.",open:"\"How long does it take a new SDR on your team to build their first proper list?\""},
+ {n:"RevOps",tag:"Gatekeeper",pain:"Duplicate and stale CRM data, integrations that create noise.",trig:"CRM migration, data clean up project",msg:"Clean, enriched records that land where you want them, and nowhere else.",open:"\"When reps import contacts, who cleans up after them?\""},
+ {n:"Marketing and demand gen",tag:"Influencer",pain:"ABM lists built by hand, campaigns that miss the right accounts.",trig:"New campaign, event, ABM program",msg:"Target lists that match your ICP in minutes, with the people behind each account.",open:"\"How are you building the account list for your next campaign?\""},
+ {n:"Consultants and relationship sellers",tag:"My original ICP angle",mine:true,pain:"They sell through networks but miss the moment a contact changes job or a client's company raises money.",trig:"Job changes in their network, client funding rounds",msg:"Know when your network moves, before anyone else does.",open:"\"When one of your best clients changes companies, how do you usually find out?\""}
+];
+const BC={
+ "ZoomInfo":{when:"Larger teams with global territories, often on multi year contracts.",strong:["Large global database and mature platform","Deep integrations and intent data","Well known brand with leadership"],win:["ANZ native data with stronger local mobile coverage","Pricing in AUD with local support","Easy to run alongside an existing contract"],trap:"How many of your Australian contacts connect on the first dial?",mine:"Don't attack ZoomInfo directly. Most buyers chose it for good reasons. Position Firmable as the ANZ layer they're missing."},
+ "Apollo":{when:"Price sensitive SMB and startup teams.",strong:["Low entry price and a free plan","Built in sequencing","Fast to get started"],win:["Accuracy on ANZ contacts and direct dials","Compliance and data built for this market","Better cost per connected conversation"],trap:"What happens to your sequence metrics when a third of your emails bounce?",mine:"Don't argue on price per seat. Move the conversation to cost per conversation."},
+ "Sales Navigator":{when:"Relationship led sellers, consultants and founders.",strong:["Best view of who works where","Great for warm intros and relationship mapping","Already on most sellers' desktops"],win:["Direct dials and verified emails, which Sales Nav doesn't give you","One click push into HubSpot or Salesforce","Signals across the whole market, not just your network"],trap:"Once you've found the right person in Sales Nav, how do you get their number?",mine:"Never position against Sales Nav. Position Firmable as the step after it."}
+};
+const IND=[
+ ["SaaS and tech","Head of Sales, SDR managers","Speed to pipeline as they scale headcount","\"Most SaaS teams I speak with are hiring SDRs faster than they can build lists.\"","Cold called a SaaS company and booked a demo the same day"],
+ ["Financial services and fintech","Head of Sales, partnerships","Accurate data on regulated, hard to reach buyers","\"Your peers in payments are already using this to reach ANZ finance leaders.\"","Months of persistent outreach became a $45K deal and a company values nomination"],
+ ["Telco","Heads of account management and BDMs","Run alongside a global tool for better local coverage","\"Your team is probably paying for global data you can't use locally.\"","Three decision makers on one evaluation call after months of no's"],
+ ["Professional services","Partners, BD leads, consultants","Know when clients move or raise money","\"How do you find out when one of your clients changes company?\"","Became my original ICP angle for relationship sellers"],
+ ["Manufacturing (NZ)","Sales managers, GMs","Reach buyers outside the usual tech heavy lists","\"Most data tools are built for tech. Your buyers aren't on those lists.\"","Opened an NZ manufacturing account with multi touch outreach"],
+ ["Education and edtech","Growth, partnerships","Target schools and providers by size and region","\"How are you finding the right decision maker at each provider?\"","Progressed an edtech account through to an open opportunity"]
+];
+
+// routing
+const pages=[...document.querySelectorAll(".page")],links=[...document.querySelectorAll("#tabs a")];
+function go(){const id=(location.hash||"#overview").slice(1);const ok=pages.some(p=>p.dataset.page===id)?id:"overview";
+  pages.forEach(p=>p.hidden=p.dataset.page!==ok);
+  links.forEach(a=>{if(a.getAttribute("href")==="#"+ok)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
+  window.scrollTo(0,0);}
+addEventListener("hashchange",go);go();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+
+// objection library
+const cats=["All",...new Set(OBJ.map(o=>o.c))];let cat="All";
+const catsEl=document.getElementById("cats");
+catsEl.innerHTML=cats.map(c=>`<button type="button" class="chip" data-c="${esc(c)}" aria-pressed="${c==="All"}">${esc(c)}</button>`).join("");
+catsEl.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cat=b.dataset.c;[...catsEl.children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderObj();});
+const qEl=document.getElementById("q");qEl.addEventListener("input",renderObj);
+const maxF=Math.max(...OBJ.map(o=>o.f));
+const trend={up:["up","▲ rising"],down:["down","▼ falling"],flat:["flat","steady"]};
+function renderObj(){const q=qEl.value.trim().toLowerCase();
+  const list=OBJ.filter(o=>(cat==="All"||o.c===cat)&&(!q||(o.q+o.why+o.say+o.c).toLowerCase().includes(q)));
+  document.getElementById("objList").innerHTML=list.length?list.map((o,i)=>`<details class="obj"${i===0?" open":""}><summary><h3>"${esc(o.q)}"</h3><span class="tog" aria-hidden="true">+</span>
+  <div class="metaRow"><span class="pill">${esc(o.c)}</span><span class="pill ${trend[o.t][0]}">${trend[o.t][1]}</span><span class="freq"><span class="track"><i style="width:${o.f/maxF*100}%"></i></span>${o.f}% of objections</span></div></summary>
+  <div class="body"><div><span class="k">What's behind it</span><p>${esc(o.why)}</p></div><div class="say"><span class="k">What to say</span><p>"${esc(o.say)}"</p></div><div><span class="k">Proof point</span><p class="muted">${esc(o.proof)}</p></div></div></details>`).join(""):`<div class="panel empty">No objections match that search. Try a competitor name or a word like budget.</div>`;}
+renderObj();
+
+// personas
+document.getElementById("personaGrid").innerHTML=PERS.map(p=>`<div class="panel persona${p.mine?" mine":""}"><div class="top"><h3>${esc(p.n)}</h3><span class="pill${p.mine?" real":""}">${esc(p.tag)}</span></div>
+<dl><div><dt>Pain</dt><dd>${esc(p.pain)}</dd></div><div><dt>Buying trigger</dt><dd>${esc(p.trig)}</dd></div><div><dt>Message</dt><dd><b>${esc(p.msg)}</b></dd></div></dl>
+<div class="open"><span class="k">Opening line</span><p>${esc(p.open)}</p></div></div>`).join("");
+
+// battlecards
+const bcT=document.getElementById("bcTabs"),bcB=document.getElementById("bcBody");
+bcT.innerHTML=Object.keys(BC).map((k,i)=>`<button type="button" class="chip" data-k="${esc(k)}" aria-pressed="${i===0}">vs ${esc(k)}</button>`).join("");
+function bc(k){const d=BC[k];[...bcT.children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===k)));
+ bcB.innerHTML=`<div class="panel"><span class="k">When they come up</span><p style="margin-top:4px">${esc(d.when)}</p></div>
+ <div class="bc"><div class="panel"><span class="k">Where ${esc(k)} is strong</span><ul>${d.strong.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+ <div class="panel win"><span class="k">Where Firmable wins</span><ul>${d.win.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
+ <div class="bc"><div class="panel"><span class="k">Trap question to ask</span><p class="trap" style="margin-top:6px">"${esc(d.trap)}"</p></div>
+ <div class="panel"><span class="k">Landmine to avoid</span><p style="margin-top:6px">${esc(d.mine)}</p></div></div>`;}
+bcT.addEventListener("click",e=>{const b=e.target.closest("button");if(b)bc(b.dataset.k);});bc("ZoomInfo");
+
+// industries
+document.querySelector("#indTable tbody").innerHTML=IND.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td><i>${esc(r[3])}</i></td><td class="muted">${esc(r[4])}</td></tr>`).join("");
+})();
+</script>
+</body>
+</html>
