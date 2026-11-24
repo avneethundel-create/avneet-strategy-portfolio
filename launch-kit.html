@@ -11,13 +11,13 @@
 <style>
 /* Layout: a field guide. Sticky step list on the left, one long column of steps on the right. Each step = purpose, a worked example, the anatomy of each element, AI prompts and a check. */
 :root{
-  --bg:#0C0C0C; --surface:#151312; --ink:#EFE4DA; --muted:#A89C93; --line:#2B2522;
-  --accent:#F2823A; --accent-soft:#2E1A0F; --on-accent:#FFFFFF; --fill:#E2561F; --sandy:#FFB27A; --apricot:#F2823A;
-  --slide:#151312; --slide-ink:#EFE4DA; --slide-muted:#A89C93;
+  --bg:#FFFFFF; --surface:#F3F6F9; --ink:#0B2545; --muted:#5E6E7E; --line:#E1E7EE;
+  --accent:#0A8792; --accent-soft:#E3F5F4; --on-accent:#FFFFFF; --fill:#0B2545; --sandy:#BFEDEA; --apricot:#5FD3CF;
+  --slide:#F3F6F9; --slide-ink:#0B2545; --slide-muted:#5E6E7E;
   --display:'Kanit', system-ui, sans-serif;
   --body:'Kanit', system-ui, sans-serif;
   --mono:'Kanit', system-ui, sans-serif;
-  color-scheme:dark;
+  color-scheme:light;
 }
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
@@ -143,18 +143,18 @@ a{color:inherit}
 .ar{font-family:"Segoe UI Symbol","Segoe UI",system-ui,-apple-system,sans-serif;font-weight:400}
 
 /* dark theme to match the main page */
-:root{color-scheme:dark}
+:root{color-scheme:light}
 body{font-weight:300;-webkit-font-smoothing:antialiased}
 h1,h2,h3{font-weight:700;letter-spacing:-.015em}
-h1{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;background:linear-gradient(180deg,#6E6259 0%,#F3E4D6 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+h1{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;background:linear-gradient(180deg,#0B2545 35%,#0A8792 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 b,strong{font-weight:600}
 a{color:var(--accent)}
-::selection{background:#F2823A;color:#0C0C0C}
-.banner,.pill.flat,.node.human,.chips span,.mock .pain b,.mh .l.hot,.mh .c.hot,.callout,.mock .pain:nth-child(3) b,.mh .l.hot *,.callout *{color:#1A0A02}
+::selection{background:#0A8792;color:#fff}
+.banner,.pill.flat,.node.human,.chips span,.mock .pain b,.mh .l.hot,.mh .c.hot,.callout,.mock .pain:nth-child(3) b,.mh .l.hot *,.callout *{color:#0B2545}
 .mock .pain:nth-child(1) b{color:#fff}
-.prompt{background:#1C1917;color:var(--ink);border:1px solid var(--line)}
+.prompt{background:#F3F6F9;color:var(--ink);border:1px solid var(--line)}
 .callout [style*="background"],.callout [style*="background"] *{color:var(--ink)}
-.node.human,.node.human *{color:#1A0A02}
+.node.human,.node.human *{color:#0B2545}
 </style>
 </head>
 <body>
